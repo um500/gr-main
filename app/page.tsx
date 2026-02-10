@@ -20,18 +20,24 @@ export default async function Home() {
   // 🔹 HERO DATA
   const homepage: HomepageData = await sanityClient.fetch(homepageHeroQuery);
 
-  // 🔹 FEATURED DEVELOPERS (HOME PAGE)
+  // 🔹 FEATURED DEVELOPERS
   const developers = await sanityClient.fetch(featuredDevelopersQuery);
 
-  // 🔹 COMMUNITIES (SEARCH)
+  // 🔹 COMMUNITIES
   const communities = await sanityClient.fetch(communitiesQuery);
+
+  // ✅ ✅ ✅ MOST IMPORTANT FIX
+  const safeHeroSlides =
+    homepage?.heroSlides?.filter(
+      (s) => s.active && s.image?.asset?.url
+    ) || [];
 
   return (
     <>
       <Navbar />
 
       <Hero
-        slides={homepage.heroSlides.filter((s) => s.active)}
+        slides={safeHeroSlides}
         ctaText={homepage.heroCTA}
         communities={communities}
       />
@@ -39,7 +45,6 @@ export default async function Home() {
       <About />
       <Property />
 
-      {/* ✅ YAHI FIX HAI */}
       <Developer developers={developers} />
 
       <Blog />

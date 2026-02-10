@@ -8,7 +8,11 @@ import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 interface HeroSlide {
   title: string;
   subtitle?: string;
-  image: string;
+  image: {
+    asset: {
+      url: string;
+    };
+  };
   active: boolean;
 }
 
@@ -108,7 +112,7 @@ export default function Hero({
             }`}
           >
             <img
-              src={slide.image}
+              src={slide.image.asset.url}
               alt={slide.title}
               className="w-full h-full object-cover"
             />
@@ -134,7 +138,6 @@ export default function Hero({
           {/* SEARCH */}
           <div ref={searchRef} className="relative mt-10 max-w-xl">
             <div className="bg-white flex items-center p-2 rounded-lg text-gray-900">
-
               {/* BUY / RENT */}
               <div className="relative">
                 <button
@@ -197,12 +200,8 @@ export default function Hero({
                     }}
                     className="px-4 py-3 cursor-pointer hover:bg-amber-50"
                   >
-                    <p className="font-medium text-gray-900">
-                      {c.name}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {c.area}
-                    </p>
+                    <p className="font-medium">{c.name}</p>
+                    <p className="text-sm text-gray-500">{c.area}</p>
                   </div>
                 ))}
               </div>
@@ -211,75 +210,36 @@ export default function Hero({
         </div>
       </div>
 
-      {/* LEFT ARROW */}
-<button
-  onClick={() => changeSlide((index - 1 + activeSlides.length) % activeSlides.length)}
-  className="
-    absolute 
-    left-6 
-    top-1/2 
-    -translate-y-1/2 
-    z-20 
-    bg-black/40 
-    hover:bg-black/60
-    p-3 
-    rounded-full 
-    text-white 
-    transition
-  "
->
-  <ChevronLeft size={24} />
-</button>
-
-{/* RIGHT ARROW */}
-<button
-  onClick={() => changeSlide((index + 1) % activeSlides.length)}
-  className="
-    absolute 
-    right-6 
-    top-1/2 
-    -translate-y-1/2 
-    z-20 
-    bg-black/40 
-    hover:bg-black/60
-    p-3 
-    rounded-full 
-    text-white 
-    transition
-  "
->
-  <ChevronRight size={24} />
-</button>
-{/* SLIDER DOTS */}
-<div
-  className="
-    absolute 
-    bottom-8 
-    left-1/2 
-    -translate-x-1/2 
-    z-20 
-    flex 
-    gap-3
-  "
->
-  {activeSlides.map((_, i) => (
-    <button
-      key={i}
-      onClick={() => changeSlide(i)}
-      className={`
-        transition-all 
-        duration-300
-        rounded-full
-        ${
-          i === index
-            ? "w-8 h-2 bg-white"
-            : "w-2 h-2 bg-white/50 hover:bg-white"
+      {/* ARROWS & DOTS */}
+      <button
+        onClick={() =>
+          changeSlide((index - 1 + activeSlides.length) % activeSlides.length)
         }
-      `}
-    />
-  ))}
-</div>
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white"
+      >
+        <ChevronLeft size={24} />
+      </button>
 
+      <button
+        onClick={() => changeSlide((index + 1) % activeSlides.length)}
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white"
+      >
+        <ChevronRight size={24} />
+      </button>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+        {activeSlides.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => changeSlide(i)}
+            className={`rounded-full transition-all ${
+              i === index
+                ? "w-8 h-2 bg-white"
+                : "w-2 h-2 bg-white/50 hover:bg-white"
+            }`}
+          />
+        ))}
+      </div>
     </section>
   );
 }

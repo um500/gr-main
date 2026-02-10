@@ -1,152 +1,93 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
+import Image from "next/image";
 
-// Golden color
-const goldenColor = "#C9A227";
+/* ================= TYPES ================= */
 
-// ================= TYPES =================
-type Developer = {
+interface Developer {
   _id: string;
   name: string;
-  slug: {
-    current: string;
+  logo?: {
+    asset?: {
+      url?: string;
+    };
   };
-  shortDescription: string;
-  logo?: string;
-  heroImage?: string;
-};
+  description?: string;
+}
 
-// ================= ANIMATIONS =================
-const containerVariants = {
-  hidden: {},
+/* ================= ANIMATION ================= */
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
   visible: {
+    opacity: 1,
+    y: 0,
     transition: {
-      staggerChildren: 0.15,
+      duration: 0.45,
+      ease: [0.25, 0.1, 0.25, 1],
     },
   },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
+/* ================= COMPONENT ================= */
 
-// ================= CARD =================
-const DeveloperCard = ({ developer }: { developer: Developer }) => {
-  return (
-    <motion.div
-      variants={cardVariants}
-      whileHover={{ y: -8 }}
-      className="bg-white rounded-2xl overflow-hidden shadow-lg p-4 hover:shadow-2xl transition"
-    >
-      {/* Image */}
-      <div className="h-56 overflow-hidden rounded-xl mb-4">
-        <motion.img
-          src={developer.heroImage || developer.logo || "/placeholder.jpg"}
-          alt={developer.name}
-          className="w-full h-full object-cover"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4 }}
-        />
-      </div>
-
-      {/* Content */}
-      <div className="pt-2">
-        <h3 className="text-xl font-bold mb-2 text-[#1a3a5c]">
-          {developer.name}
-        </h3>
-
-        <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
-          {developer.shortDescription}
-        </p>
-
-        <Link href={`/developers/${developer.slug.current}`}>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
-            className="w-full py-3 rounded-lg text-white font-semibold cursor-pointer"
-            style={{ backgroundColor: goldenColor }}
-          >
-            View Projects
-          </motion.button>
-        </Link>
-      </div>
-    </motion.div>
-  );
-};
-
-// ================= MAIN SECTION =================
-export default function Developers({
+export default function DeveloperSection({
   developers,
 }: {
   developers: Developer[];
 }) {
-  return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className="bg-gray-50 py-16 px-4 md:py-24"
-    >
-      <div className="container mx-auto max-w-7xl">
-        {/* Label */}
-        <h2
-          className="text-2xl font-bold mb-4 text-center"
-          style={{ color: goldenColor }}
-        >
-          Developers
-        </h2>
+  if (!developers?.length) return null;
 
-        {/* Header */}
-        <div className="mb-12 text-center">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Dubai's Premier Real Estate Developers
-          </h1>
-          <p className="text-gray-600 text-base md:text-lg max-w-4xl mx-auto">
-            We are partnered with the top developers shaping Dubai&apos;s skyline.
-            Explore our trusted network of UAE&apos;s most respected names in real
-            estate.
+  return (
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-14">
+          <h2 className="text-4xl font-serif text-gray-900">
+            Trusted Developers
+          </h2>
+          <p className="mt-3 text-gray-600 max-w-xl mx-auto">
+            We partner with reputed developers known for quality,
+            transparency, and timely delivery.
           </p>
         </div>
 
-        {/* Grid */}
         <motion.div
-          variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
         >
-          {developers.length === 0 ? (
-            <p className="col-span-full text-center text-gray-500">
-              No featured developers found.
-            </p>
-          ) : (
-            developers.map((developer) => (
-              <DeveloperCard
-                key={developer._id}
-                developer={developer}
-              />
-            ))
-          )}
-        </motion.div>
+          {developers.map((dev) => (
+            <motion.div
+              key={dev._id}
+              variants={cardVariants}
+              whileHover={{ y: -8 }}
+              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition flex flex-col items-center text-center"
+            >
+              <div className="relative w-28 h-28 mb-4">
+                <Image
+                  src={dev.logo?.asset?.url || "/images/placeholder.jpg"}
+                  alt={dev.name}
+                  fill
+                  sizes="112px"
+                  className="object-contain"
+                />
+              </div>
 
-        {/* View All */}
-        <div className="text-center">
-          <Link href="/developers">
-            <button className="inline-flex cursor-pointer items-center gap-2 px-8 py-3 border-2 rounded-full font-semibold text-gray-700">
-              View All Developers →
-            </button>
-          </Link>
-        </div>
+              <h3 className="text-lg font-semibold text-gray-900">
+                {dev.name}
+              </h3>
+
+              {dev.description && (
+                <p className="text-sm text-gray-600 mt-2">
+                  {dev.description}
+                </p>
+              )}
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
-    </motion.section>
+    </section>
   );
 }
