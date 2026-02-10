@@ -1,0 +1,187 @@
+import Image from "next/image";
+import CTA from "@/components/sections/CTA";
+import {
+  Search,
+  FileText,
+  Key,
+  Headphones,
+  CheckCircle2,
+} from "lucide-react";
+import Footer from "@/components/layout/Footer";
+
+export default function HowItWorks() {
+  return (
+    <main className="bg-[#faf9f6]">
+      {/* HERO */}
+      <section className="relative h-[70vh] w-full">
+        <Image
+          src="/assets/hero-1.jpg"
+          alt="How it works"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-center px-6">
+          <div className="max-w-3xl text-white">
+            <p className="tracking-widest text-sm text-gold mb-3">
+              OUR PROCESS
+            </p>
+            <h1 className="text-4xl md:text-5xl font-serif mb-4">
+              How It Works
+            </h1>
+            <p className="text-gray-200">
+              Our streamlined process makes buying property in Dubai simple,
+              transparent, and stress-free.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* STEP 1 */}
+      <Section
+        step="01"
+        icon={<Search size={18} />}
+        title="Consultation & Discovery"
+        text="We begin by understanding your goals, budget, and preferences. Our experts will guide you through the current market trends and opportunities."
+        image="/hiw1.png"
+        points={[
+          "Personal consultation call or meeting",
+          "Budget and timeline assessment",
+          "Location and property type preferences",
+          "Investment goals discussion",
+        ]}
+      />
+
+      {/* STEP 2 */}
+      <Section
+        step="02"
+        reverse
+        icon={<FileText size={18} />}
+        title="Property Selection"
+        text="Based on your requirements, we curate a personalized selection of properties that match your criteria."
+        image="/hiw2.png"
+        points={[
+          "Customized property shortlist",
+          "Virtual and in-person viewings",
+          "Detailed property comparisons",
+          "Market analysis and pricing insights",
+        ]}
+      />
+
+      {/* STEP 3 */}
+      <Section
+        step="03"
+        icon={<Key size={18} />}
+        title="Purchase & Documentation"
+        text="Our team handles all paperwork and legalities, ensuring a smooth and transparent transaction."
+        image="/hiw3.png"
+        points={[
+          "Price negotiation on your behalf",
+          "Contract review and preparation",
+          "Payment plan arrangement",
+          "Legal documentation support",
+        ]}
+      />
+
+      {/* STEP 4 */}
+      <Section
+        step="04"
+        reverse
+        icon={<Headphones size={18} />}
+        title="Handover & Beyond"
+        text="We support you through the handover process and continue to assist with property management if needed."
+        image="/hiw4.png"
+        points={[
+          "Property inspection and handover",
+          "Snagging and defect resolution",
+          "Property management services",
+          "Rental and resale assistance",
+        ]}
+      />
+
+      
+      <CTA />
+            <Footer />
+    </main>
+  );
+}
+
+
+/* 🔹 STEP COMPONENT */
+function Section({
+  step,
+  title,
+  text,
+  image,
+  points,
+  icon,
+  reverse = false,
+}: any) {
+  return (
+    <section className="py-20 bg-[#FBF6E9]">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+
+        {/* STEP + ICON */}
+        <div className="order-1 md:hidden flex items-center gap-4 mb-4">
+          <span className="text-5xl font-serif text-[#E8D9A8]">
+            {step}
+          </span>
+          <div className="w-10 h-10 rounded-full border border-[#C9A227] flex items-center justify-center text-[#C9A227]">
+            {icon}
+          </div>
+        </div>
+
+        {/* IMAGE */}
+        <div
+          className={`order-2 md:${reverse ? "order-1" : "order-2"}`}
+        >
+          <div className="rounded-2xl overflow-hidden shadow-md">
+            <Image
+              src={image}
+              alt={title}
+              width={600}
+              height={420}
+              className="object-cover w-full h-auto"
+            />
+          </div>
+        </div>
+
+        {/* TEXT BLOCK */}
+        <div
+          className={`order-3 md:${reverse ? "order-2" : "order-1"}`}
+        >
+          {/* STEP + ICON (DESKTOP) */}
+          <div className="hidden md:flex items-center gap-4 mb-6">
+            <span className="text-5xl font-serif text-[#E8D9A8]">
+              {step}
+            </span>
+            <div className="w-10 h-10 rounded-full border border-[#C9A227] flex items-center justify-center text-[#C9A227]">
+              {icon}
+            </div>
+          </div>
+
+          <h3 className="text-2xl font-serif mb-4 text-black">
+            {title}
+          </h3>
+
+          <p className="text-gray-700 mb-6">
+            {text}
+          </p>
+
+          <ul className="space-y-3">
+            {points.map((p: string, i: number) => (
+              <li key={i} className="flex items-center gap-3">
+                <span className="w-5 h-5 rounded-full border border-[#C9A227] flex items-center justify-center text-[#C9A227] text-xs">
+                  ✓
+                </span>
+                <span className="text-gray-800">{p}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+
