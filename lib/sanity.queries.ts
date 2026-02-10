@@ -4,7 +4,6 @@ import { groq } from "next-sanity";
    HOMEPAGE
 ====================================================== */
 
-/* HERO SECTION */
 export const homepageHeroQuery = groq`
 *[_type == "homepage"][0]{
   heroCTA,
@@ -12,10 +11,15 @@ export const homepageHeroQuery = groq`
     title,
     subtitle,
     active,
-    "image": image.asset->url
+    image{
+      asset->{
+        url
+      }
+    }
   }
 }
 `;
+
 
 /* 🔥 FEATURED PROPERTIES (HOME PAGE – TOP 4 ONLY) */
 export const featuredPropertiesQuery = groq`

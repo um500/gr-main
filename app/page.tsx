@@ -17,36 +17,28 @@ import {
 import { HomepageData } from "@/types/homepage";
 
 export default async function Home() {
-  // 🔹 HERO DATA
+  // 🔹 Fetch data
   const homepage: HomepageData = await sanityClient.fetch(homepageHeroQuery);
-
-  // 🔹 FEATURED DEVELOPERS
   const developers = await sanityClient.fetch(featuredDevelopersQuery);
-
-  // 🔹 COMMUNITIES
   const communities = await sanityClient.fetch(communitiesQuery);
 
-  // ✅ ✅ ✅ MOST IMPORTANT FIX
-  const safeHeroSlides =
-    homepage?.heroSlides?.filter(
-      (s) => s.active && s.image?.asset?.url
-    ) || [];
+  // 🔥 SAFE HERO SLIDES (never empty unless no images at all)
+  const heroSlides =
+    homepage?.heroSlides?.filter((slide) => slide?.image?.asset?.url) || [];
 
   return (
     <>
       <Navbar />
 
       <Hero
-        slides={safeHeroSlides}
-        ctaText={homepage.heroCTA}
-        communities={communities}
+        slides={heroSlides}
+        ctaText={homepage?.heroCTA || "Explore Properties"}
+        communities={communities || []}
       />
 
       <About />
       <Property />
-
-      <Developer developers={developers} />
-
+      <Developer developers={developers || []} />
       <Blog />
       <Terminology />
       <CTA />

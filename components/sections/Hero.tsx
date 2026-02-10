@@ -8,12 +8,12 @@ import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 interface HeroSlide {
   title: string;
   subtitle?: string;
-  image: {
-    asset: {
-      url: string;
+  image?: {
+    asset?: {
+      url?: string;
     };
   };
-  active: boolean;
+  active?: boolean;
 }
 
 interface Community {
@@ -29,15 +29,38 @@ interface HeroProps {
 }
 
 const goldenColor = "#C9A227";
+const PLACEHOLDER_IMAGE = "/images/placeholder.png";
 
 /* ================= COMPONENT ================= */
 
 export default function Hero({
-  slides,
+  slides = [],
   ctaText,
-  communities,
+  communities = [],
 }: HeroProps) {
-  const activeSlides = slides.filter((s) => s.active);
+  /* 🔥 SAFEST SLIDE SELECTION */
+  const validSlides =
+    slides.filter((s) => s?.image?.asset?.url) || [];
+
+  const activeSlides =
+    validSlides.filter((s) => s.active) ||
+    validSlides;
+
+  const slidesToUse =
+    activeSlides.length > 0 ? activeSlides : validSlides;
+
+  /* 🛑 FINAL SAFETY */
+  if (!slidesToUse || slidesToUse.length === 0) {
+    return (
+      <section className="h-[80vh] flex items-center justify-center bg-gray-100">
+        <p className="text-gray-500 text-lg">
+          Hero content loading…
+        </p>
+      </section>
+    );
+  }
+
+  /* ================= STATE ================= */
 
   const [index, setIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState(0);
@@ -51,10 +74,10 @@ export default function Hero({
 
   const searchRef = useRef<HTMLDivElement>(null);
 
-  /* ================= SLIDER LOGIC ================= */
+  /* ================= SLIDER ================= */
 
   const changeSlide = (newIndex: number) => {
-    if (isAnimating || activeSlides.length < 2) return;
+    if (isAnimating || slidesToUse.length < 2) return;
     setPrevIndex(index);
     setIsAnimating(true);
     setIndex(newIndex);
@@ -62,12 +85,12 @@ export default function Hero({
   };
 
   useEffect(() => {
-    if (activeSlides.length < 2) return;
+    if (slidesToUse.length < 2) return;
     const timer = setInterval(() => {
-      changeSlide((index + 1) % activeSlides.length);
+      changeSlide((index + 1) % slidesToUse.length);
     }, 4500);
     return () => clearInterval(timer);
-  }, [index, activeSlides.length, isAnimating]);
+  }, [index, slidesToUse.length, isAnimating]);
 
   /* ================= OUTSIDE CLICK ================= */
 
@@ -79,7 +102,8 @@ export default function Hero({
       }
     }
     document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    return () =>
+      document.removeEventListener("click", handleClickOutside);
   }, []);
 
   /* ================= FILTER ================= */
@@ -92,32 +116,35 @@ export default function Hero({
       )
     : communities.slice(0, 6);
 
-  if (!activeSlides.length) return null;
-
   /* ================= JSX ================= */
 
   return (
-    <section className="relative h-[90vh] w-full">
+    <section className="relative h-[90vh] w-full overflow-hidden">
       {/* IMAGE SLIDER */}
-      <div className="absolute inset-0 overflow-hidden">
-        {activeSlides.map((slide, i) => (
-          <div
-            key={i}
-            className={`absolute inset-0 transition-transform duration-700 ${
-              i === index
-                ? "translate-x-0 z-[1]"
-                : i === prevIndex
-                ? "-translate-x-full"
-                : "translate-x-full"
-            }`}
-          >
-            <img
-              src={slide.image.asset.url}
-              alt={slide.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        ))}
+      <div className="absolute inset-0">
+        {slidesToUse.map((slide, i) => {
+          const imageUrl =
+            slide?.image?.asset?.url || PLACEHOLDER_IMAGE;
+
+          return (
+            <div
+              key={i}
+              className={`absolute inset-0 transition-transform duration-700 ${
+                i === index
+                  ? "translate-x-0 z-[1]"
+                  : i === prevIndex
+                  ? "-translate-x-full"
+                  : "translate-x-full"
+              }`}
+            >
+              <img
+                src={imageUrl}
+                alt={slide.title || "Hero Image"}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          );
+        })}
         <div className="absolute inset-0 bg-black/40 z-[2]" />
       </div>
 
@@ -125,11 +152,14 @@ export default function Hero({
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-5xl text-white px-4 md:ml-36">
           <h1 className="text-5xl font-serif">
-            {activeSlides[index].title}
+            {slidesToUse[index].title}
           </h1>
-          <p className="mt-2">
-            {activeSlides[index].subtitle}
-          </p>
+
+          {slidesToUse[index].subtitle && (
+            <p className="mt-2">
+              {slidesToUse[index].subtitle}
+            </p>
+          )}
 
           <button className="mt-6 border px-6 py-3">
             {ctaText}
@@ -146,13 +176,13 @@ export default function Hero({
                     setShowSuggestions(false);
                   }}
                   style={{ backgroundColor: goldenColor }}
-                  className="px-4 py-2 rounded text-white font-medium flex items-center gap-1"
+                  className="px-4 py-2 rounded text-white font-medium"
                 >
                   {buyType} ▼
                 </button>
 
                 {showBuyMenu && (
-                  <div className="absolute top-full left-0 mt-2 bg-white text-gray-900 shadow-xl rounded-md z-[10000]">
+                  <div className="absolute top-full left-0 mt-2 bg-white shadow-xl rounded-md z-[10000]">
                     {["BUY", "RENT"].map((t) => (
                       <div
                         key={t}
@@ -160,11 +190,7 @@ export default function Hero({
                           setBuyType(t as "BUY" | "RENT");
                           setShowBuyMenu(false);
                         }}
-                        className={`px-4 py-2 cursor-pointer hover:bg-amber-50 ${
-                          buyType === t
-                            ? "bg-amber-100 font-semibold"
-                            : ""
-                        }`}
+                        className="px-4 py-2 cursor-pointer hover:bg-amber-50"
                       >
                         {t}
                       </div>
@@ -173,7 +199,6 @@ export default function Hero({
                 )}
               </div>
 
-              {/* INPUT */}
               <input
                 value={query}
                 onChange={(e) => {
@@ -182,15 +207,14 @@ export default function Hero({
                 }}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder="Community or Building"
-                className="flex-1 px-4 outline-none bg-transparent text-gray-800"
+                className="flex-1 px-4 outline-none bg-transparent"
               />
 
               <Search className="mr-3 text-gray-500" />
             </div>
 
-            {/* SUGGESTIONS */}
             {showSuggestions && filtered.length > 0 && (
-              <div className="absolute left-0 top-full w-full bg-white text-gray-900 shadow-2xl z-[9999] max-h-64 overflow-y-auto">
+              <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-[9999]">
                 {filtered.map((c) => (
                   <div
                     key={c._id}
@@ -210,36 +234,26 @@ export default function Hero({
         </div>
       </div>
 
-      {/* ARROWS & DOTS */}
+      {/* ARROWS */}
       <button
         onClick={() =>
-          changeSlide((index - 1 + activeSlides.length) % activeSlides.length)
+          changeSlide(
+            (index - 1 + slidesToUse.length) % slidesToUse.length
+          )
         }
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white"
+        className="absolute left-6 top-1/2 z-20 bg-black/40 p-3 rounded-full text-white"
       >
-        <ChevronLeft size={24} />
+        <ChevronLeft />
       </button>
 
       <button
-        onClick={() => changeSlide((index + 1) % activeSlides.length)}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-black/40 hover:bg-black/60 p-3 rounded-full text-white"
+        onClick={() =>
+          changeSlide((index + 1) % slidesToUse.length)
+        }
+        className="absolute right-6 top-1/2 z-20 bg-black/40 p-3 rounded-full text-white"
       >
-        <ChevronRight size={24} />
+        <ChevronRight />
       </button>
-
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-        {activeSlides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => changeSlide(i)}
-            className={`rounded-full transition-all ${
-              i === index
-                ? "w-8 h-2 bg-white"
-                : "w-2 h-2 bg-white/50 hover:bg-white"
-            }`}
-          />
-        ))}
-      </div>
     </section>
   );
 }
