@@ -232,7 +232,7 @@ export default function Hero({
                     )}&purpose=${buyType}`
                   );
                 }}
-                className="mr-3 text-gray-700 hover:text-black"
+                className="ml-2 text-gray-700 hover:text-black text-sm flex-shrink-0"
               >
                 Search
               </button>
