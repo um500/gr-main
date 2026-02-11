@@ -5,6 +5,7 @@ import project from "./project";
 import searchsuggestion from "./community";
 import property from "./property";
 import media from "./media";
+import announcement from "./announcement";
 
 
 export const schemaTypes = [
@@ -15,4 +16,5 @@ export const schemaTypes = [
   searchsuggestion,
   property,
    media,
+   announcement,
 ];

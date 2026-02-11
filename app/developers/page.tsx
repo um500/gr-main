@@ -31,7 +31,7 @@ export default async function DevelopersPage() {
   return (
     <main>
       {/* ================= DEVELOPERS HERO ================= */}
-      <section className="relative h-[85vh] w-full overflow-hidden">
+      <section className="relative h-[70vh] w-full overflow-hidden">
         <Image
           src="/assets/hero-2.jpg"
           alt="Top Developers in Dubai"

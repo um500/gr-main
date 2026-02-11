@@ -22,7 +22,7 @@ export default async function PropertiesPage({
 }: {
   searchParams: SearchParams;
 }) {
-  // ✅ VERY IMPORTANT (Next.js 16)
+  // ✅ IMPORTANT (Next.js 16 requirement)
   const params = await searchParams;
 
   const communities = await sanityClient.fetch(communitiesQuery);
@@ -32,12 +32,13 @@ export default async function PropertiesPage({
     type: params.type ?? null,
     min: params.min ? Number(params.min) : null,
     max: params.max ? Number(params.max) : null,
+    purpose: params.purpose ?? null,
   });
 
   return (
     <main>
-      {/* ================= HERO ================= */}
-      <section className="relative h-[65vh] w-full overflow-hidden">
+      {/* HERO */}
+      <section className="relative h-[70vh] w-full overflow-hidden">
         <img
           src="/assets/hero-1.jpg"
           alt="Luxury Properties Dubai"
@@ -56,11 +57,15 @@ export default async function PropertiesPage({
         </div>
       </section>
 
-      {/* ================= FILTER ================= */}
-      <PropertyFilter communities={communities} />
+      {/* FILTER */}
+      <PropertyFilter
+        communities={communities || []}
+        initialCommunity={params.community ?? ""}
+        initialPurpose={params.purpose ?? "BUY"}  
+      />
 
-      {/* ================= PROPERTIES ================= */}
-      <PropertiesClient properties={properties} />
+      {/* RESULTS */}
+      <PropertiesClient properties={properties || []} /> 
 
       <CTA />
       <Footer />

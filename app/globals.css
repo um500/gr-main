@@ -66,3 +66,29 @@ body {
 .rotate-y-180 {
   transform: rotateY(180deg);
 }
+
+
+/* ===== MARQUEE ANIMATION ===== */
+
+@keyframes ticker {
+  0% {
+    transform: translateX(100vw);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.marquee-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 18s linear infinite;
+}

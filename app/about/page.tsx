@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 
-import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/layout/NavbarClient";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import { Building2, Users, Award, ShieldCheck } from "lucide-react";
@@ -95,7 +95,7 @@ export default function AboutPage() {
             <Navbar />
 
             {/* ================= HERO ================= */}
-            <section className="relative h-[85vh] w-full">
+            <section className="relative h-[70vh] w-full">
                 <Image
                     src="/assets/hero-2.jpg"
                     alt="About GR Premium Properties"

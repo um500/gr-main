@@ -11,20 +11,27 @@ type Community = {
     current: string;
   };
 };
+interface Props {
+  communities: any[];
+  initialCommunity?: string;
+  initialPurpose?: string;
+}
+
 
 export default function PropertyFilter({
   communities,
-}: {
-  communities: Community[];
-}) {
+  initialCommunity = "",
+  initialPurpose = "BUY",
+}: Props) {
   const router = useRouter();
 
   // ================= STATE =================
+  const [community, setCommunity] = useState(initialCommunity);
+  const [purpose, setPurpose] = useState(initialPurpose);
   const [query, setQuery] = useState("");                 // UI text
   const [communitySlug, setCommunitySlug] = useState(""); // ✅ actual filter value
   const [open, setOpen] = useState(false);
 
-  const [purpose, setPurpose] = useState("");
   const [type, setType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -38,16 +45,16 @@ export default function PropertyFilter({
 
 
   const resetFilters = () => {
-  setQuery("");
-  setCommunitySlug("");
-  setPurpose("");
-  setType("");
-  setMinPrice("");
-  setMaxPrice("");
-  setOpen(false);
+    setQuery("");
+    setCommunitySlug("");
+    setPurpose("");
+    setType("");
+    setMinPrice("");
+    setMaxPrice("");
+    setOpen(false);
 
-  router.push("/properties"); // 🔥 URL reset
-};
+    router.push("/properties"); // 🔥 URL reset
+  };
 
   // ================= AUTO APPLY FILTER =================
   useEffect(() => {
@@ -93,17 +100,17 @@ export default function PropertyFilter({
                   .slice(0, 6)
                   .map((item) => (
                     <button
-  key={item._id}
-  onClick={() => {
-    setQuery(item.name);                           // UI
-    setCommunitySlug(item.slug?.current || "");   // SAFE
-    setOpen(false);
-  }}
-  className="w-full text-left px-4 py-3 hover:bg-[#FAF9F7]"
->
-  <p className="text-sm font-medium">{item.name}</p>
-  <p className="text-xs text-gray-500">{item.area}</p>
-</button>
+                      key={item._id}
+                      onClick={() => {
+                        setQuery(item.name);                           // UI
+                        setCommunitySlug(item.slug?.current || "");   // SAFE
+                        setOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-[#FAF9F7]"
+                    >
+                      <p className="text-sm font-medium">{item.name}</p>
+                      <p className="text-xs text-gray-500">{item.area}</p>
+                    </button>
 
                   ))}
 
@@ -178,18 +185,25 @@ export default function PropertyFilter({
 
           {/* ================= FIND (OPTIONAL) ================= */}
           <button
-            className="border border-[#D4AF37] text-white px-6 py-3 rounded-full font-semibold bg-[#D4AF37] hover:text-black transition"
+            onClick={() => {
+              router.push(
+                `/properties?community=${encodeURIComponent(
+                  community
+                )}&purpose=${purpose}`
+              );
+            }}
           >
             Find
           </button>
-                    {/* ================= RESET FILTER ================= */}
-<button
-  onClick={resetFilters}
-  className="border border-[#D4AF37] text-white px-6 py-3 rounded-full font-semibold bg-[#D4AF37] hover:text-black transition"
->
-  Reset
-</button>
-          
+
+          {/* ================= RESET FILTER ================= */}
+          <button
+            onClick={resetFilters}
+            className="border border-[#D4AF37] text-white px-6 py-3 rounded-full font-semibold bg-[#D4AF37] hover:text-black transition"
+          >
+            Reset
+          </button>
+
         </div>
       </div>
     </section>

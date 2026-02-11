@@ -20,19 +20,22 @@ const LANGUAGES = [
   { code: "ja", label: "日本語" }
 ];
 
-export default function Navbar() {
+export default function NavbarClient({
+  announcements,
+}: {
+  announcements: any[];
+}) {
   const pathname = usePathname();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [featureOpen, setFeatureOpen] = useState(false);
   const [openEnquiry, setOpenEnquiry] = useState(false);
 
-  /* 🌐 LANGUAGE STATE (ALWAYS OUTSIDE) */
   const [langOpen, setLangOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState("en");
   const langRef = useRef<HTMLDivElement>(null);
 
-  /* BODY LOCK (DRAWER) */
+  /* BODY LOCK */
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => {
@@ -56,19 +59,44 @@ export default function Navbar() {
 
   return (
     <>
+      {/* ================= TOP SCROLLING BAR ================= */}
+<div className="marquee-container bg-yellow-500 text-black text-sm py-2 z-[1500]">
+  {announcements?.length > 0 ? (
+    <div className="marquee-content font-medium px-4">
+      {announcements.map((item, index) => (
+        <span key={index} className="mx-6">
+          {item.eventDate && (
+            <>📅 {new Date(item.eventDate).toLocaleDateString("en-IN")} </>
+          )}
+          {item.city && <>– {item.city} </>}
+          {item.title} |
+        </span>
+      ))}
+    </div>
+  ) : (
+    <span className="px-4">No announcements available</span>
+  )}
+</div>
+
+
+
+
+
+
+
       {/* ================= HEADER ================= */}
-      <header className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur">
-        <nav className="flex items-center px-6 lg:px-14 py-4 text-white">
-          {/* LOGO */}
-          <Link href="/" className="shrink-0">
-            <Image
-              src="/assets/logo.png"
-              alt="GR Premium Properties"
-              width={120}
-              height={40}
-              priority
-            />
-          </Link>
+      <header className="fixed top-[32px] left-0 w-full z-[1000] bg-black/40 backdrop-blur">
+  <nav className="flex items-center px-6 lg:px-14 py-2 text-white">
+    <Link href="/" className="shrink-0">
+      <Image
+        src="/assets/logo.png"
+        alt="GR Premium Properties"
+        width={90}
+        height={30}
+        priority
+      />
+    </Link>
+
 
           {/* DESKTOP MENU */}
           <ul className="hidden lg:flex items-center gap-6 ml-auto text-sm uppercase tracking-wider">
@@ -77,7 +105,6 @@ export default function Navbar() {
             <li><Link href="/properties" className={isActive("/properties") ? "text-yellow-400" : ""}>Properties</Link></li>
             <li><Link href="/blog" className={isActive("/blog") ? "text-yellow-400" : ""}>Blog</Link></li>
 
-            {/* FEATURE PLAN (DESKTOP) */}
             <li className="relative group">
               <span className="cursor-pointer hover:text-yellow-400">
                 Feature Plan ▾
@@ -95,16 +122,10 @@ export default function Navbar() {
             <li><Link href="/contact" className={isActive("/contact") ? "text-yellow-400" : ""}>Contact Us</Link></li>
           </ul>
 
-          {/* RIGHT ACTIONS (ALWAYS VISIBLE) */}
+          {/* RIGHT ACTIONS */}
           <div className="ml-auto lg:ml-6 flex items-center gap-4">
-            <button
-              onClick={() => setOpenEnquiry(true)}
-              className="bg-yellow-500 text-black px-5 py-2 rounded font-semibold hover:bg-yellow-400"
-            >
-              Enquire Now
-            </button>
 
-            {/* 🌐 LANGUAGE — ALWAYS OUTSIDE (DESKTOP + MOBILE) */}
+            {/* 🌐 LANGUAGE */}
             <div ref={langRef} className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
@@ -114,7 +135,7 @@ export default function Navbar() {
               </button>
 
               {langOpen && (
-                <div className="absolute right-0 mt-3 w-48 bg-white text-black rounded-xl shadow-xl overflow-hidden z-50">
+                <div className="absolute right-0 mt-3 w-48 bg-white text-black rounded-xl shadow-xl overflow-hidden z-[2000]">
                   {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
@@ -131,7 +152,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* ☰ TOGGLE (DESKTOP + MOBILE) */}
+            {/* TOGGLE */}
             <button
               onClick={() => setDrawerOpen(true)}
               className="text-xl border border-white/40 rounded px-3 py-1"
@@ -144,8 +165,8 @@ export default function Navbar() {
 
       {/* ================= DRAWER ================= */}
       {drawerOpen && (
-        <div className="fixed inset-0 z-[999] bg-black/40">
-          <div className="absolute right-0 top-0 h-full w-[320px] bg-white text-black p-6 shadow-2xl overflow-y-auto">
+        <div className="fixed inset-0 z-[3000] bg-black/50">
+          <div className="absolute right-0 top-0 h-full w-[320px] bg-white text-black p-6 shadow-2xl overflow-y-auto z-[3100]">
             <button
               onClick={() => setDrawerOpen(false)}
               className="text-2xl absolute top-4 right-4"
@@ -163,7 +184,6 @@ export default function Navbar() {
               <li><Link href="/properties" onClick={() => setDrawerOpen(false)}>Properties</Link></li>
               <li><Link href="/blog" onClick={() => setDrawerOpen(false)}>Blog</Link></li>
 
-              {/* FEATURE PLAN (DRAWER) */}
               <li>
                 <button
                   onClick={() => setFeatureOpen(!featureOpen)}
@@ -191,6 +211,7 @@ export default function Navbar() {
               <li><Link href="/Media" onClick={() => setDrawerOpen(false)}>Media</Link></li>
               <li><Link href="/contact" onClick={() => setDrawerOpen(false)}>Contact Us</Link></li>
 
+              {/* ✅ Drawer Enquire Button (Only One Now) */}
               <li>
                 <button
                   onClick={() => {

@@ -206,3 +206,13 @@ export const mediaQuery = `
 }
 `;
 
+
+
+
+export const announcementQuery = groq`
+  *[_type == "announcement"]{
+    title,
+    eventDate,
+    city
+  }
+`;

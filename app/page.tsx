@@ -1,4 +1,3 @@
-import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Property from "@/components/sections/Property";
@@ -17,18 +16,16 @@ import {
 import { HomepageData } from "@/types/homepage";
 
 export default async function Home() {
-  // 🔹 Fetch data
   const homepage: HomepageData = await sanityClient.fetch(homepageHeroQuery);
   const developers = await sanityClient.fetch(featuredDevelopersQuery);
   const communities = await sanityClient.fetch(communitiesQuery);
 
-  // 🔥 SAFE HERO SLIDES (never empty unless no images at all)
   const heroSlides =
     homepage?.heroSlides?.filter((slide) => slide?.image?.asset?.url) || [];
 
   return (
     <>
-      <Navbar />
+      {/* ❌ Navbar REMOVE from here */}
 
       <Hero
         slides={heroSlides}

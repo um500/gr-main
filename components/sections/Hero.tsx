@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 /* ================= TYPES ================= */
 
@@ -73,6 +74,7 @@ export default function Hero({
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   /* ================= SLIDER ================= */
 
@@ -83,6 +85,17 @@ export default function Hero({
     setIndex(newIndex);
     setTimeout(() => setIsAnimating(false), 700);
   };
+
+  const handleSearch = () => {
+    if (!query.trim()) return;
+
+    router.push(
+      `/properties?community=${encodeURIComponent(query)}&purpose=${buyType}`
+    );
+
+    setShowSuggestions(false);
+  };
+
 
   useEffect(() => {
     if (slidesToUse.length < 2) return;
@@ -110,10 +123,10 @@ export default function Hero({
 
   const filtered = query.trim()
     ? communities.filter(
-        (c) =>
-          c.name.toLowerCase().includes(query.toLowerCase()) ||
-          c.area.toLowerCase().includes(query.toLowerCase())
-      )
+      (c) =>
+        c.name.toLowerCase().includes(query.toLowerCase()) ||
+        c.area.toLowerCase().includes(query.toLowerCase())
+    )
     : communities.slice(0, 6);
 
   /* ================= JSX ================= */
@@ -129,13 +142,12 @@ export default function Hero({
           return (
             <div
               key={i}
-              className={`absolute inset-0 transition-transform duration-700 ${
-                i === index
+              className={`absolute inset-0 transition-transform duration-700 ${i === index
                   ? "translate-x-0 z-[1]"
                   : i === prevIndex
-                  ? "-translate-x-full"
-                  : "translate-x-full"
-              }`}
+                    ? "-translate-x-full"
+                    : "translate-x-full"
+                }`}
             >
               <img
                 src={imageUrl}
@@ -210,23 +222,40 @@ export default function Hero({
                 className="flex-1 px-4 outline-none bg-transparent"
               />
 
-              <Search className="mr-3 text-gray-500" />
+              <button
+                onClick={() => {
+                  if (!query.trim()) return;
+
+                  router.push(
+                    `/properties?community=${encodeURIComponent(
+                      query
+                    )}&purpose=${buyType}`
+                  );
+                }}
+                className="mr-3 text-gray-700 hover:text-black"
+              >
+                Search
+              </button>
+
+
+
             </div>
 
             {showSuggestions && filtered.length > 0 && (
-              <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-[9999]">
+              <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-[9999] text-black">
+
                 {filtered.map((c) => (
                   <div
                     key={c._id}
                     onClick={() => {
-                      setQuery(c.name);
-                      setShowSuggestions(false);
+                      window.location.href = `/properties?search=${encodeURIComponent(c.name)}&mode=${buyType}`;
                     }}
-                    className="px-4 py-3 cursor-pointer hover:bg-amber-50"
+                    className="px-4 py-3 cursor-pointer hover:bg-amber-50 text-black"
                   >
-                    <p className="font-medium">{c.name}</p>
-                    <p className="text-sm text-gray-500">{c.area}</p>
+                    <p className="font-medium text-black">{c.name}</p>
+                    <p className="text-sm text-black">{c.area}</p>
                   </div>
+
                 ))}
               </div>
             )}
