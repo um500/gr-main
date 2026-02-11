@@ -194,19 +194,20 @@ export default function Hero({
               />
 
               <button
-                onClick={() => {
-                  if (!query.trim()) return;
+  onClick={() => {
+    if (!query.trim()) return;
 
-                  router.push(
-                    `/properties?community=${encodeURIComponent(
-                      query
-                    )}&purpose=${buyType}`
-                  );
-                }}
-                className="ml-2 text-gray-700 hover:text-black text-sm flex-shrink-0"
-              >
-                Search
-              </button>
+    router.push(
+      `/properties?community=${encodeURIComponent(
+        query
+      )}&purpose=${buyType}`
+    );
+  }}
+  className="ml-2 px-4 py-2 bg-[#C9A227] cursor-pointer hover:bg-[#b8921e] text-white text-sm rounded-md transition-all duration-300 flex-shrink-0"
+>
+  Search
+</button>
+
 
 
 
