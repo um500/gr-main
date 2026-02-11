@@ -180,36 +180,7 @@ export default function Hero({
           {/* SEARCH */}
           <div ref={searchRef} className="relative mt-10 w-full max-w-xl px-2 sm:px-0">
             <div className="bg-white flex items-center w-full p-2 rounded-lg text-gray-900 overflow-hidden">
-              {/* BUY / RENT */}
-              <div className="relative">
-                <button
-                  onClick={() => {
-                    setShowBuyMenu((p) => !p);
-                    setShowSuggestions(false);
-                  }}
-                  style={{ backgroundColor: goldenColor }}
-                  className="px-3 py-2 rounded text-white font-medium whitespace-nowrap text-sm flex-shrink-0"
-                >
-                  {buyType} ▼
-                </button>
-
-                {showBuyMenu && (
-                  <div className="absolute top-full left-0 mt-2 bg-white shadow-xl rounded-md z-[10000]">
-                    {["BUY", "RENT"].map((t) => (
-                      <div
-                        key={t}
-                        onClick={() => {
-                          setBuyType(t as "BUY" | "RENT");
-                          setShowBuyMenu(false);
-                        }}
-                        className="px-4 py-2 cursor-pointer hover:bg-amber-50"
-                      >
-                        {t}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              
 
               <input
                 value={query}
@@ -219,7 +190,7 @@ export default function Hero({
                 }}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder="Community or Building"
-                className="flex-1 min-w-0 px-0 outline-none bg-transparent text-sm"
+                className="flex-1 min-w-0 px-2 outline-none bg-transparent text-sm"
               />
 
               <button
