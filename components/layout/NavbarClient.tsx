@@ -21,10 +21,11 @@ const LANGUAGES = [
 ];
 
 export default function NavbarClient({
-  announcements,
+  announcements = [],
 }: {
-  announcements: any[];
+  announcements?: any[];
 }) {
+
   const pathname = usePathname();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -60,43 +61,36 @@ export default function NavbarClient({
   return (
     <>
       {/* ================= TOP SCROLLING BAR ================= */}
-<div className="marquee-container bg-yellow-500 text-black text-sm py-2 z-[1500]">
-  {announcements?.length > 0 ? (
-    <div className="marquee-content font-medium px-4">
-      {announcements.map((item, index) => (
-        <span key={index} className="mx-6">
-          {item.eventDate && (
-            <>📅 {new Date(item.eventDate).toLocaleDateString("en-IN")} </>
-          )}
-          {item.city && <>– {item.city} </>}
-          {item.title} |
-        </span>
-      ))}
-    </div>
-  ) : (
-    <span className="px-4">No announcements available</span>
-  )}
-</div>
-
-
-
-
-
-
+      <div className="marquee-container bg-yellow-500 text-black text-sm py-2 z-[1500]">
+        {announcements?.length > 0 ? (
+          <div className="marquee-content font-medium px-4">
+            {announcements.map((item, index) => (
+              <span key={index} className="mx-6">
+                {item.eventDate && (
+                  <>📅 {new Date(item.eventDate).toLocaleDateString("en-IN")} </>
+                )}
+                {item.city && <>– {item.city} </>}
+                {item.title} |
+              </span>
+            ))}
+          </div>
+        ) : (
+          <span className="px-4">No announcements available</span>
+        )}
+      </div>
 
       {/* ================= HEADER ================= */}
       <header className="fixed top-[32px] left-0 w-full z-[1000] bg-black/40 backdrop-blur">
-  <nav className="flex items-center px-6 lg:px-14 py-2 text-white">
-    <Link href="/" className="shrink-0">
-      <Image
-        src="/assets/logo.png"
-        alt="GR Premium Properties"
-        width={90}
-        height={30}
-        priority
-      />
-    </Link>
-
+        <nav className="flex items-center px-6 lg:px-14 py-2 text-white">
+          <Link href="/" className="shrink-0">
+            <Image
+              src="/assets/logo.png"
+              alt="GR Premium Properties"
+              width={90}
+              height={30}
+              priority
+            />
+          </Link>
 
           {/* DESKTOP MENU */}
           <ul className="hidden lg:flex items-center gap-6 ml-auto text-sm uppercase tracking-wider">
@@ -124,8 +118,6 @@ export default function NavbarClient({
 
           {/* RIGHT ACTIONS */}
           <div className="ml-auto lg:ml-6 flex items-center gap-4">
-
-            {/* 🌐 LANGUAGE */}
             <div ref={langRef} className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
@@ -152,7 +144,6 @@ export default function NavbarClient({
               )}
             </div>
 
-            {/* TOGGLE */}
             <button
               onClick={() => setDrawerOpen(true)}
               className="text-xl border border-white/40 rounded px-3 py-1"
@@ -211,7 +202,6 @@ export default function NavbarClient({
               <li><Link href="/Media" onClick={() => setDrawerOpen(false)}>Media</Link></li>
               <li><Link href="/contact" onClick={() => setDrawerOpen(false)}>Contact Us</Link></li>
 
-              {/* ✅ Drawer Enquire Button (Only One Now) */}
               <li>
                 <button
                   onClick={() => {
@@ -228,7 +218,6 @@ export default function NavbarClient({
         </div>
       )}
 
-      {/* ================= ENQUIRY MODAL ================= */}
       <EnquiryModal open={openEnquiry} onClose={() => setOpenEnquiry(false)} />
     </>
   );
