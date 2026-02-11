@@ -178,8 +178,8 @@ export default function Hero({
           </button>
 
           {/* SEARCH */}
-          <div ref={searchRef} className="relative mt-10 max-w-xl">
-            <div className="bg-white flex items-center p-2 rounded-lg text-gray-900">
+          <div ref={searchRef} className="relative mt-10 w-full max-w-xl px-2 sm:px-0">
+            <div className="bg-white flex items-center w-full p-2 rounded-lg text-gray-900 overflow-hidden">
               {/* BUY / RENT */}
               <div className="relative">
                 <button
@@ -188,7 +188,7 @@ export default function Hero({
                     setShowSuggestions(false);
                   }}
                   style={{ backgroundColor: goldenColor }}
-                  className="px-4 py-2 rounded text-white font-medium"
+                  className="px-3 py-2 rounded text-white font-medium whitespace-nowrap text-sm flex-shrink-0"
                 >
                   {buyType} ▼
                 </button>
@@ -219,7 +219,7 @@ export default function Hero({
                 }}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder="Community or Building"
-                className="flex-1 px-4 outline-none bg-transparent"
+                className="flex-1 min-w-0 px-0 outline-none bg-transparent text-sm"
               />
 
               <button
