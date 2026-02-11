@@ -1,8 +1,6 @@
-"use client";
-
 import { motion, Variants } from "framer-motion";
 
-import Navbar from "@/components/layout/NavbarClient";
+import Navbar from "@/components/layout/NavbarServer";
 import Footer from "@/components/layout/Footer";
 import Image from "next/image";
 import { Building2, Users, Award, ShieldCheck } from "lucide-react";
