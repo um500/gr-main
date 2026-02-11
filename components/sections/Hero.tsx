@@ -143,10 +143,10 @@ export default function Hero({
             <div
               key={i}
               className={`absolute inset-0 transition-transform duration-700 ${i === index
-                  ? "translate-x-0 z-[1]"
-                  : i === prevIndex
-                    ? "-translate-x-full"
-                    : "translate-x-full"
+                ? "translate-x-0 z-[1]"
+                : i === prevIndex
+                  ? "-translate-x-full"
+                  : "translate-x-full"
                 }`}
             >
               <img
@@ -180,7 +180,7 @@ export default function Hero({
           {/* SEARCH */}
           <div ref={searchRef} className="relative mt-10 w-full max-w-xl px-2 sm:px-0">
             <div className="bg-white flex items-center w-full p-2 rounded-lg text-gray-900 overflow-hidden">
-              
+
 
               <input
                 value={query}
@@ -194,19 +194,19 @@ export default function Hero({
               />
 
               <button
-  onClick={() => {
-    if (!query.trim()) return;
+                onClick={() => {
+                  if (!query.trim()) return;
 
-    router.push(
-      `/properties?community=${encodeURIComponent(
-        query
-      )}&purpose=${buyType}`
-    );
-  }}
-  className="ml-2 px-4 py-2 bg-[#C9A227] cursor-pointer hover:bg-[#b8921e] text-white text-sm rounded-md transition-all duration-300 flex-shrink-0"
->
-  Search
-</button>
+                  router.push(
+                    `/properties?community=${encodeURIComponent(
+                      query
+                    )}&purpose=${buyType}`
+                  );
+                }}
+                className="ml-2 px-4 py-2 bg-[#C9A227] cursor-pointer hover:bg-[#b8921e] text-white text-sm rounded-md transition-all duration-300 flex-shrink-0"
+              >
+                Search
+              </button>
 
 
 
