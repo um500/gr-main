@@ -15,34 +15,44 @@ export default function EnquiryModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999]">
 
       {/* BACKDROP */}
       <div
-        className="absolute inset-0 bg-black/60"
+        className="fixed inset-0 bg-black/70"
         onClick={onClose}
       />
 
-      {/* MODAL */}
-      <div className="relative bg-white w-full max-w-xl mx-4 rounded-2xl p-6 sm:p-8 shadow-xl animate-fadeIn">
-        
-        {/* CLOSE */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-black"
-        >
-          <X size={22} />
-        </button>
+      {/* SCROLL AREA */}
+      <div className="fixed inset-0 overflow-y-auto">
 
-        <h2 className="text-2xl font-serif mb-6 text-center">
-          Send Your Enquiry
-        </h2>
+        {/* SPACING WRAPPER */}
+        <div className="min-h-full flex justify-center items-start pt-24 pb-16 px-4">
 
-        {/* FORM */}
-        <EnquiryForm
-          defaultProperty={propertyName}
-          onClose={onClose}
-        />
+          {/* MODAL BOX */}
+          <div className="relative bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl">
+
+            {/* CLOSE BUTTON */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-gray-500 hover:text-black"
+            >
+              <X size={22} />
+            </button>
+
+            {/* TITLE */}
+            <h2 className="text-xl font-semibold mb-6 text-center">
+              Send Your Enquiry
+            </h2>
+
+            {/* FORM */}
+            <EnquiryForm
+              defaultProperty={propertyName}
+              onClose={onClose}
+            />
+
+          </div>
+        </div>
       </div>
     </div>
   );

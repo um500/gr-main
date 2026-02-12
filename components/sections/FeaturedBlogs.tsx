@@ -1,24 +1,31 @@
 import { sanityClient } from "@/lib/sanity.client";
 import { allBlogsQuery } from "@/lib/sanity.queries";
 import BlogCard from "@/components/cards/BlogCard";
+import Link from "next/link";
 
 export default async function FeaturedBlogs() {
   const blogs = await sanityClient.fetch(allBlogsQuery);
 
   return (
-    // 🔥 FORCE FULL WIDTH (parent flex override)
     <section className="w-full py-20 bg-[#E5E7EB]">
-      {/* Inner full-width wrapper */}
       <div className="w-full px-6">
         {/* Heading */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl font-bold">Latest Blogs</h2>
-          <p className="text-gray-500 mt-2">
-            Insights, news & real estate updates
-          </p>
-        </div>
+<div className="text-center max-w-2xl mx-auto mb-12">
+  <span className="text-[#C9A227] text-sm font-semibold tracking-[0.2em] uppercase">
+    Blogs
+  </span>
 
-        {/* 🔥 GRID – FORCE STRETCH */}
+  <h2 className="text-3xl font-bold mt-3">
+    Latest Blogs
+  </h2>
+
+  <p className="text-gray-500 mt-4">
+    Insights, news & real estate updates
+  </p>
+</div>
+
+
+        {/* GRID */}
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {blogs.map((blog: any) => (
@@ -36,6 +43,22 @@ export default async function FeaturedBlogs() {
             ))}
           </div>
         </div>
+
+        {/* ================= VIEW ALL BLOGS BUTTON ================= */}
+        <div className="text-center mt-16">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 px-10 py-4 
+                       border-2 border-[#C9A227] 
+                       text-[#1E2A38] font-semibold 
+                       rounded-full 
+                       hover:bg-[#C9A227] hover:text-white 
+                       transition-all duration-300"
+          >
+            View All Blogs →
+          </Link>
+        </div>
+        {/* ========================================================== */}
       </div>
     </section>
   );

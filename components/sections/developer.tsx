@@ -45,16 +45,23 @@ export default function DeveloperSection({
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
+       
         {/* HEADING */}
-        <div className="text-center mb-14">
-          <h2 className="text-4xl font-serif text-gray-900">
-            Trusted Developers
-          </h2>
-          <p className="mt-3 text-gray-600 max-w-xl mx-auto">
-            We partner with reputed developers known for quality,
-            transparency, and timely delivery.
-          </p>
-        </div>
+<div className="text-center mb-14">
+  <span className="text-[#C9A227] text-sm font-semibold tracking-[0.2em] uppercase">
+    Developers
+  </span>
+
+  <h2 className="text-4xl font-serif text-gray-900 mt-3">
+    Trusted Developers
+  </h2>
+
+  <p className="mt-4 text-gray-600 max-w-xl mx-auto">
+    We partner with reputed developers known for quality,
+    transparency, and timely delivery.
+  </p>
+</div>
+
 
         {/* GRID */}
         <motion.div
@@ -80,6 +87,7 @@ export default function DeveloperSection({
                     src={imageUrl}
                     alt={dev.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </div>
@@ -107,6 +115,22 @@ export default function DeveloperSection({
             );
           })}
         </motion.div>
+
+        {/* ================= VIEW ALL BUTTON ================= */}
+        <div className="text-center mt-16">
+          <Link
+            href="/developers"
+            className="inline-flex items-center gap-2 px-10 py-4 
+                       border-2 border-[#C9A227] 
+                       text-[#1E2A38] font-semibold 
+                       rounded-full 
+                       hover:bg-[#C9A227] hover:text-white 
+                       transition-all duration-300"
+          >
+            View All Developers →
+          </Link>
+        </div>
+        {/* =================================================== */}
       </div>
     </section>
   );
