@@ -4,26 +4,25 @@ import { PortableText } from "@portabletext/react";
 import { urlFor } from "@/lib/sanity.image";
 import CTA from "@/components/sections/CTA";
 import Footer from "@/components/layout/Footer";
+import { notFound } from "next/navigation";
 
 type PageProps = {
-  params: { slug: string };
+  params: {
+    slug: string;
+  };
 };
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = params;
+  const slug = params.slug;
 
-  // ✅ FIXED HERE
+  // ✅ Correct Sanity fetch with parameter
   const blog = await sanityClient.fetch(
     getSingleBlogQuery,
     { slug }
   );
 
   if (!blog) {
-    return (
-      <main className="py-32 text-center text-2xl font-semibold bg-white dark:bg-[#0F172A] text-black dark:text-white">
-        Blog not found
-      </main>
-    );
+    notFound();
   }
 
   return (
@@ -32,9 +31,9 @@ export default async function Page({ params }: PageProps) {
       {/* ================= HERO SECTION ================= */}
       <section className="relative h-[420px] md:h-[520px] flex items-center justify-center text-white text-center overflow-hidden">
         
-        {blog.mainImage && (
+        {blog.mainImage?.asset?.url && (
           <img
-            src={urlFor(blog.mainImage).width(1800).url()}
+            src={blog.mainImage.asset.url}
             alt={blog.title}
             className="absolute inset-0 w-full h-full object-cover"
           />
@@ -57,34 +56,18 @@ export default async function Page({ params }: PageProps) {
 
       {/* ================= BLOG CONTENT ================= */}
       <section className="max-w-5xl mx-auto py-16 px-6">
-        <div className="prose prose-lg max-w-none 
-                        prose-headings:text-black 
-                        dark:prose-headings:text-white
-                        prose-p:text-gray-700 
-                        dark:prose-p:text-gray-300
-                        prose-strong:text-black 
-                        dark:prose-strong:text-white">
-
+        <div
+          className="prose prose-lg max-w-none
+          prose-headings:text-black
+          dark:prose-headings:text-white
+          prose-p:text-gray-700
+          dark:prose-p:text-gray-300
+          prose-strong:text-black
+          dark:prose-strong:text-white"
+        >
           <PortableText
             value={blog.content}
             components={{
-              block: {
-                h2: ({ children }) => (
-                  <h2 className="mt-14 mb-6 border-b border-gray-300 dark:border-gray-700 pb-3 text-2xl font-semibold">
-                    {children}
-                  </h2>
-                ),
-                h3: ({ children }) => (
-                  <h3 className="mt-10 mb-4 text-xl font-semibold">
-                    {children}
-                  </h3>
-                ),
-                normal: ({ children }) => (
-                  <p className="mb-6 leading-relaxed">
-                    {children}
-                  </p>
-                ),
-              },
               types: {
                 image: ({ value }) => (
                   <img
