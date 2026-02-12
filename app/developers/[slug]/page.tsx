@@ -94,7 +94,7 @@ export default async function DeveloperPage({
 
               <a
                 href="/contact"
-                className="border border-white text-white px-8 py-3 rounded-lg"
+                className="bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold"
               >
                 Enquire Now
               </a>
@@ -105,7 +105,7 @@ export default async function DeveloperPage({
 
       {/* ================= STATS ================= */}
       {developer.stats && (
-        <section className="py-12 bg-[#FAF9F7]">
+        <section className="py-12 bg-[#FAF9F7] dark:bg-black transition-colors duration-300">
           <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center">
             {developer.stats.experience && (
               <div>
@@ -155,7 +155,7 @@ export default async function DeveloperPage({
       )}
 
       {/* ================= ABOUT ================= */}
-      <section className="py-20 bg-white">
+     <section className="py-20 bg-white dark:bg-black transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-6">
             About {developer.name}
@@ -168,7 +168,7 @@ export default async function DeveloperPage({
       </section>
 
       {/* ================= PROJECTS ================= */}
-      <section id="projects" className="py-20 bg-gray-50">
+    <section id="projects" className="py-20 bg-gray-50 dark:bg-black transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-12">
             Projects by {developer.name}

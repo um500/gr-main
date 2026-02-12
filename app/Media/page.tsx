@@ -11,7 +11,6 @@ const query = `
   location,
   mediaType,
 
-  // image type
   images[]{
     asset->{
       _id,
@@ -19,7 +18,6 @@ const query = `
     }
   },
 
-  // video type
   youtubeUrl
 }
 `;
@@ -28,7 +26,8 @@ export default async function MediaPage() {
   const media = await sanityClient.fetch(query);
 
   return (
-    <main>
+    <main className="bg-white dark:bg-[#0F172A] transition-colors duration-300">
+      
       {/* ================= HERO SECTION ================= */}
       <section className="relative h-[50vh] w-full">
         <img
@@ -52,32 +51,39 @@ export default async function MediaPage() {
       </section>
 
       {/* ================= MEDIA GRID ================= */}
-      <section className="px-6 md:px-20 py-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
-          {media.map((item: any) => (
-            <div key={item._id} className="space-y-3">
+      <section className="px-6 md:px-20 py-20 bg-gray-50 dark:bg-[#111827] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto">
 
-              {/* CARD HEADING */}
-              <h3 className="text-sm font-semibold uppercase tracking-wide">
-                {item.mediaType === "image" ? "Image" : "Video"}
-              </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+            {media.map((item: any) => (
+              <div
+                key={item._id}
+                className="space-y-3"
+              >
+                {/* CARD TYPE LABEL */}
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-[#C9A227]">
+                  {item.mediaType === "image" ? "Image" : "Video"}
+                </h3>
 
-              {/* ================= IMAGE CARD ================= */}
-              {item.mediaType === "image" && item.images?.length > 0 && (
-                <ImageCard
-                  images={item.images}
-                  title={item.title}
-                  location={item.location}
-                />
-              )}
+                {/* ================= IMAGE CARD ================= */}
+                {item.mediaType === "image" &&
+                  item.images?.length > 0 && (
+                    <ImageCard
+                      images={item.images}
+                      title={item.title}
+                      location={item.location}
+                    />
+                  )}
 
-              {/* ================= VIDEO CARD ================= */}
-              {item.mediaType === "youtube" && item.youtubeUrl && (
-                <VideoCard youtubeUrl={item.youtubeUrl} />
-              )}
+                {/* ================= VIDEO CARD ================= */}
+                {item.mediaType === "youtube" &&
+                  item.youtubeUrl && (
+                    <VideoCard youtubeUrl={item.youtubeUrl} />
+                  )}
+              </div>
+            ))}
+          </div>
 
-            </div>
-          ))}
         </div>
       </section>
 

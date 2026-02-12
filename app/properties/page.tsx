@@ -27,25 +27,22 @@ export default async function PropertiesPage({
 
   const params = await searchParams;
 
-  // Fetch communities for filter dropdown
   const communities = await sanityClient.fetch(communitiesQuery);
 
-  // Fetch filtered properties
-const properties = await sanityClient.fetch(propertiesQuery, {
-  community: params.community ?? null,
-  search: params.search ?? null,
-  purpose: params.purpose ?? null,
-  type: params.type ?? null,
-  bed: params.bed ?? null,
-  min: params.min ? Number(params.min) : null,
-  max: params.max ? Number(params.max) : null,
-});
-
+  const properties = await sanityClient.fetch(propertiesQuery, {
+    community: params.community ?? null,
+    search: params.search ?? null,
+    purpose: params.purpose ?? null,
+    type: params.type ?? null,
+    bed: params.bed ?? null,
+    min: params.min ? Number(params.min) : null,
+    max: params.max ? Number(params.max) : null,
+  });
 
   return (
-    <main>
+    <main className="bg-white dark:bg-[#0F172A] transition-colors duration-300">
 
-      {/* HERO */}
+      {/* ================= HERO ================= */}
       <section className="relative h-[70vh] w-full overflow-hidden">
         <img
           src="/assets/hero-1.jpg"
@@ -65,26 +62,29 @@ const properties = await sanityClient.fetch(propertiesQuery, {
         </div>
       </section>
 
-      {/* FILTER */}
-      <PropertyFilter
-        communities={communities || []}
-      />
+      {/* ================= FILTER ================= */}
+      <PropertyFilter communities={communities || []} />
 
-      {/* RESULTS */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      {/* ================= RESULTS ================= */}
+      <section className="max-w-7xl mx-auto px-6 py-20">
+
         {properties.length === 0 ? (
-          <div className="text-center py-24">
-            <div className="text-6xl mb-4">🔍</div>
-            <h2 className="text-2xl font-semibold">
+          <div className="text-center py-28">
+            <div className="text-6xl mb-6">🔍</div>
+
+            <h2 className="text-2xl md:text-3xl font-semibold 
+                           text-gray-900 dark:text-white">
               No properties found
             </h2>
-            <p className="text-gray-500 mt-2">
-              Try adjusting your filters or reset search.
+
+            <p className="text-gray-600 dark:text-gray-400 mt-3">
+              Try adjusting your filters or reset your search.
             </p>
           </div>
         ) : (
           <PropertiesClient properties={properties} />
         )}
+
       </section>
 
       <CTA />

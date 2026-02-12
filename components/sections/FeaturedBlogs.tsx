@@ -7,23 +7,23 @@ export default async function FeaturedBlogs() {
   const blogs = await sanityClient.fetch(allBlogsQuery);
 
   return (
-    <section className="w-full py-20 bg-[#E5E7EB]">
+    <section className="w-full py-20 bg-[#E5E7EB] dark:bg-[#0F172A] transition-colors duration-300">
       <div className="w-full px-6">
+
         {/* Heading */}
-<div className="text-center max-w-2xl mx-auto mb-12">
-  <span className="text-[#C9A227] text-sm font-semibold tracking-[0.2em] uppercase">
-    Blogs
-  </span>
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="text-[#C9A227] text-sm font-semibold tracking-[0.2em] uppercase">
+            Blogs
+          </span>
 
-  <h2 className="text-3xl font-bold mt-3">
-    Latest Blogs
-  </h2>
+          <h2 className="text-3xl font-bold mt-3 text-gray-900 dark:text-white">
+            Latest Blogs
+          </h2>
 
-  <p className="text-gray-500 mt-4">
-    Insights, news & real estate updates
-  </p>
-</div>
-
+          <p className="text-gray-600 dark:text-gray-400 mt-4">
+            Insights, news & real estate updates
+          </p>
+        </div>
 
         {/* GRID */}
         <div className="max-w-7xl mx-auto w-full">
@@ -44,21 +44,33 @@ export default async function FeaturedBlogs() {
           </div>
         </div>
 
-        {/* ================= VIEW ALL BLOGS BUTTON ================= */}
+        {/* VIEW ALL BLOGS BUTTON */}
         <div className="text-center mt-16">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 px-10 py-4 
-                       border-2 border-[#C9A227] 
-                       text-[#1E2A38] font-semibold 
-                       rounded-full 
-                       hover:bg-[#C9A227] hover:text-white 
-                       transition-all duration-300"
+            className="
+              inline-flex 
+              items-center 
+              gap-2 
+              px-10 
+              py-4 
+              border-2 
+              border-[#C9A227] 
+              text-[#1E2A38] 
+              dark:text-[#C9A227]
+              font-semibold 
+              rounded-full 
+              hover:bg-[#C9A227] 
+              hover:text-white 
+              dark:hover:text-black
+              transition-all 
+              duration-300
+            "
           >
             View All Blogs →
           </Link>
         </div>
-        {/* ========================================================== */}
+
       </div>
     </section>
   );

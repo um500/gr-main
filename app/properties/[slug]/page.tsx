@@ -13,17 +13,24 @@ export default async function DeveloperPage({
   );
 
   return (
-    <main className="py-20 bg-white">
+    <main className="py-24 bg-white dark:bg-[#0F172A] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-3xl font-bold mb-12 capitalize">
+
+        {/* ================= HEADING ================= */}
+        <h1 className="text-3xl md:text-4xl font-bold mb-14 capitalize 
+                       text-gray-900 dark:text-white">
           Projects by {params.slug.replace(/-/g, " ")}
         </h1>
 
+        {/* ================= CONTENT ================= */}
         {properties.length === 0 ? (
-          <p className="text-gray-500">No properties found.</p>
+          <p className="text-gray-600 dark:text-gray-400">
+            No properties found.
+          </p>
         ) : (
           <DeveloperPropertiesClient properties={properties} />
         )}
+
       </div>
     </main>
   );

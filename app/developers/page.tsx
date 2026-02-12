@@ -29,7 +29,8 @@ export default async function DevelopersPage() {
   const developers: Developer[] = await sanityClient.fetch(query);
 
   return (
-    <main>
+    <main className="bg-white dark:bg-[#0f172a] transition-colors duration-300">
+
       {/* ================= DEVELOPERS HERO ================= */}
       <section className="relative h-[70vh] w-full overflow-hidden">
         <Image
@@ -63,14 +64,18 @@ export default async function DevelopersPage() {
 
       {/* ================= DEVELOPERS SECTION ================= */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
+
+        {/* HEADING */}
         <div className="text-center mb-14">
-          <p className="text-yellow-500 uppercase tracking-widest text-sm">
+          <p className="text-[#C9A227] uppercase tracking-widest text-sm">
             Our Developers
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2">
+
+          <h2 className="text-3xl md:text-4xl font-bold mt-2 text-gray-900 dark:text-white">
             Top Real Estate Developers in Dubai
           </h2>
-          <p className="text-gray-600 mt-4 max-w-2xl mx-auto">
+
+          <p className="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">
             We work with Dubai’s most trusted and reputed developers to bring you
             premium residential and commercial projects.
           </p>
@@ -81,7 +86,7 @@ export default async function DevelopersPage() {
           {developers.map((dev) => (
             <div
               key={dev._id}
-              className="group border rounded-2xl overflow-hidden bg-white hover:shadow-2xl transition duration-300"
+              className="group rounded-2xl overflow-hidden bg-white shadow-md hover:shadow-2xl transition duration-300"
             >
               {/* IMAGE */}
               <div className="relative h-56 w-full bg-gray-100 overflow-hidden">
@@ -101,17 +106,19 @@ export default async function DevelopersPage() {
 
               {/* CONTENT */}
               <div className="p-6">
-                <h3 className="text-xl font-semibold">{dev.name}</h3>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {dev.name}
+                </h3>
 
                 {dev.shortDescription && (
-                  <p className="text-sm text-gray-600 mt-3 line-clamp-3">
+                  <p className="text-sm text-gray-700 mt-3 line-clamp-3">
                     {dev.shortDescription}
                   </p>
                 )}
 
                 <Link
                   href={`/developers/${dev.slug}`}
-                  className="inline-flex items-center mt-5 text-blue-600 font-medium hover:underline"
+                  className="inline-flex items-center mt-5 text-[#C9A227] font-medium hover:underline"
                 >
                   View Projects →
                 </Link>
@@ -123,7 +130,8 @@ export default async function DevelopersPage() {
 
       {/* ================= CTA ================= */}
       <CTA />
-            <Footer />
+      <Footer />
+
     </main>
   );
 }

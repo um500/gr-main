@@ -43,25 +43,24 @@ export default function DeveloperSection({
   if (!developers?.length) return null;
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-gray-50 dark:bg-[#0F172A] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4">
-       
+
         {/* HEADING */}
-<div className="text-center mb-14">
-  <span className="text-[#C9A227] text-sm font-semibold tracking-[0.2em] uppercase">
-    Developers
-  </span>
+        <div className="text-center mb-14">
+          <span className="text-[#C9A227] text-sm font-semibold tracking-[0.2em] uppercase">
+            Developers
+          </span>
 
-  <h2 className="text-4xl font-serif text-gray-900 mt-3">
-    Trusted Developers
-  </h2>
+          <h2 className="text-4xl font-serif text-gray-900 dark:text-white mt-3">
+            Trusted Developers
+          </h2>
 
-  <p className="mt-4 text-gray-600 max-w-xl mx-auto">
-    We partner with reputed developers known for quality,
-    transparency, and timely delivery.
-  </p>
-</div>
-
+          <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+            We partner with reputed developers known for quality,
+            transparency, and timely delivery.
+          </p>
+        </div>
 
         {/* GRID */}
         <motion.div
@@ -71,15 +70,24 @@ export default function DeveloperSection({
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10"
         >
           {developers.map((dev) => {
-            const imageUrl =
-              dev.heroImage?.asset?.url || PLACEHOLDER;
+            const imageUrl = dev.heroImage?.asset?.url || PLACEHOLDER;
 
             return (
               <motion.div
                 key={dev._id}
                 variants={cardVariants}
                 whileHover={{ y: -6 }}
-                className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden flex flex-col"
+                className="
+                  bg-white 
+                  dark:bg-[#111827]
+                  rounded-2xl 
+                  shadow-lg 
+                  hover:shadow-2xl 
+                  transition 
+                  overflow-hidden 
+                  flex 
+                  flex-col
+                "
               >
                 {/* IMAGE */}
                 <div className="relative w-full h-56">
@@ -94,19 +102,29 @@ export default function DeveloperSection({
 
                 {/* CONTENT */}
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     {dev.name}
                   </h3>
 
-                  <p className="text-sm text-gray-600 mt-3 line-clamp-3 flex-1">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 line-clamp-3 flex-1">
                     {dev.shortDescription ||
                       "Explore premium projects by this trusted real estate developer, known for quality construction and timely delivery."}
                   </p>
 
-                  {/* BUTTON */}
                   <Link
                     href={`/developers/${dev.slug?.current || ""}`}
-                    className="mt-6 inline-block text-center bg-[#C9A227] text-white font-medium py-3 rounded-lg hover:bg-[#b8961f] transition"
+                    className="
+                      mt-6 
+                      inline-block 
+                      text-center 
+                      bg-[#C9A227] 
+                      text-black 
+                      font-medium 
+                      py-3 
+                      rounded-lg 
+                      hover:bg-[#b8961f] 
+                      transition
+                    "
                   >
                     View Projects
                   </Link>
@@ -116,21 +134,30 @@ export default function DeveloperSection({
           })}
         </motion.div>
 
-        {/* ================= VIEW ALL BUTTON ================= */}
+        {/* VIEW ALL BUTTON */}
         <div className="text-center mt-16">
           <Link
             href="/developers"
-            className="inline-flex items-center gap-2 px-10 py-4 
-                       border-2 border-[#C9A227] 
-                       text-[#1E2A38] font-semibold 
-                       rounded-full 
-                       hover:bg-[#C9A227] hover:text-white 
-                       transition-all duration-300"
+            className="
+              inline-flex 
+              items-center 
+              gap-2 
+              px-10 
+              py-4 
+              border-2 
+              border-[#C9A227] 
+              text-[#C9A227] 
+              rounded-full 
+              hover:bg-[#C9A227] 
+              hover:text-black 
+              transition-all 
+              duration-300
+            "
           >
             View All Developers →
           </Link>
         </div>
-        {/* =================================================== */}
+
       </div>
     </section>
   );

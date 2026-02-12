@@ -109,7 +109,7 @@ useEffect(() => {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
+      className="fixed inset-0 z-[9999] text-black bg-black/60 backdrop-blur-sm flex items-center justify-center px-4"
       onClick={() => {
         if (onClose) onClose();   // ✅ side click close
       }}

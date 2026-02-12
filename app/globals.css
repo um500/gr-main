@@ -128,3 +128,46 @@ body {
   width: 100%;
   overflow: hidden;
 }
+
+.filter-select {
+  appearance: none;
+  border: 1px solid #e5e5e5;
+  padding: 12px 18px;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 14px;
+  min-width: 140px;
+  transition: all 0.2s ease;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== DARK MODE ===== */
+
+.dark .filter-select {
+  background: #1f2937;
+  border-color: #374151;
+  color: #ffffff;
+}
+
+.dark .filter-select:focus {
+  border-color: #D4AF37;
+}
+.input-style {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 2px solid #C9A227;
+  padding: 0.75rem 1rem;
+  outline: none;
+  background-color: white;
+  transition: 0.2s ease;
+}
+
+.input-style:focus {
+  box-shadow: 0 0 0 2px #C9A227;
+}

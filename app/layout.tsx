@@ -6,6 +6,8 @@ import NavbarServer from "@/components/layout/NavbarServer";
 import Footer from "@/components/layout/Footer";
 import { FloatingButtons } from "@/components/ui/FloatingButtons";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
+import { ThemeProvider } from "next-themes";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,24 +31,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" suppressHydrationWarning>
+  <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0F172A] text-white`}>
 
-        <AnnouncementBar />
-        {/* Global Navbar */}
-        <NavbarServer />
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
 
+      <AnnouncementBar />
+      <NavbarServer />
 
-        {/* Page Content */}
-        <main className="w-full">{children}</main>
+      <main className="w-full">{children}</main>
 
-        
+      <FloatingButtons />
 
-        {/* Floating Call / WhatsApp / BackToTop Buttons */}
-        <FloatingButtons />
-      </body>
-    </html>
+    </ThemeProvider>
+  </body>
+</html>
+
   );
 }

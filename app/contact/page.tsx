@@ -19,10 +19,10 @@ export default function ContactPage() {
 
     emailjs
       .sendForm(
-        "service_uyrhwx8",   // SERVICE ID
-        "template_yimkgyn",  // TEMPLATE ID
+        "service_uyrhwx8",
+        "template_yimkgyn",
         e.target,
-        "lVPUd6uuppl88FX8U"  // PUBLIC KEY
+        "lVPUd6uuppl88FX8U"
       )
       .then(() => {
         setSuccess("Enquiry sent successfully ✅");
@@ -35,7 +35,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="w-full overflow-hidden bg-[#FBF6E9]">
+    <div className="w-full overflow-hidden bg-[#FBF6E9] dark:bg-[#0f172a] transition-colors duration-300">
 
       {/* HERO */}
       <section className="relative h-[320px] sm:h-[420px] flex items-center justify-center text-center text-white">
@@ -57,29 +57,25 @@ export default function ContactPage() {
       {/* MAIN */}
       <section className="max-w-7xl mx-auto px-4 py-14 grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12">
 
-        {/* LEFT */}
+        {/* LEFT INFO */}
         <div>
           <p className="text-yellow-500 tracking-widest mb-2">
             CONTACT INFORMATION
           </p>
-          <h2 className="text-3xl font-serif mb-8">Get in Touch</h2>
+          <h2 className="text-3xl font-serif mb-8 dark:text-white">
+            Get in Touch
+          </h2>
 
           <div className="space-y-6">
-            <Info
-              icon={<MapPin />}
-              title="Office Address"
-              text={`Business Bay, Churchill Towers\nDubai, United Arab Emirates`}
-            />
+            <Info icon={<MapPin />} title="Office Address"
+              text={`Business Bay, Churchill Towers\nDubai, United Arab Emirates`} />
             <Info icon={<Phone />} title="Phone" text="+971 50 123 4567" />
             <Info icon={<Mail />} title="Email" text="info@grpremium.com" />
-            <Info
-              icon={<Clock />}
-              title="Working Hours"
-              text={`Mon – Sat: 9:00 AM – 6:00 PM\nSunday: By Appointment`}
-            />
+            <Info icon={<Clock />} title="Working Hours"
+              text={`Mon – Sat: 9:00 AM – 6:00 PM\nSunday: By Appointment`} />
           </div>
 
-          <div className="mt-10 rounded-xl overflow-hidden border-2 border-yellow-300 h-[300px] sm:h-[360px] w-full">
+          <div className="mt-10 rounded-xl overflow-hidden border-2 border-[#C9A227] h-[300px] sm:h-[360px] w-full">
             <iframe
               className="w-full h-full"
               loading="lazy"
@@ -90,18 +86,18 @@ export default function ContactPage() {
           </div>
         </div>
 
-        {/* RIGHT - FORM */}
-        <div className="bg-white border-2 border-yellow-300 rounded-2xl p-6 sm:p-8 shadow-sm self-start">
-          <h3 className="text-2xl font-serif mb-6">Send Us an Enquiry</h3>
+        {/* RIGHT FORM */}
+        <div className="bg-white dark:bg-[#111827] border-2 border-[#C9A227] rounded-2xl p-6 sm:p-8 shadow-sm self-start transition-colors duration-300">
+          <h3 className="text-2xl font-serif mb-6 dark:text-white">
+            Send Us an Enquiry
+          </h3>
 
           <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
             <Input name="name" label="Full Name" placeholder="Enter your full name" />
             <Input name="email" label="Email" type="email" placeholder="your@email.com" />
-
             <Input name="phone" label="Phone Number" placeholder="+971 XX XXX XXXX" />
 
-            {/* COUNTRY */}
             <InputSelect
               name="country"
               label="Country of Residence"
@@ -116,43 +112,45 @@ export default function ContactPage() {
             />
 
             {/* INTERESTED PROPERTY */}
-            <div className="sm:col-span-2">
-              <label className="text-sm font-medium">
+            <div className="sm:col-span-2 relative">
+              <label className="text-sm font-medium dark:text-gray-200">
                 Interested Property <span className="text-red-500">*</span>
               </label>
+
               <select
                 name="interested_property"
                 required
-                className="mt-2 w-full rounded-lg border-2 border-yellow-300 px-4 py-3
-                           focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+                className="mt-2 w-full rounded-xl border-2 border-[#C9A227]
+                           bg-white dark:bg-[#1f2937]
+                           text-gray-900 dark:text-white
+                           px-4 py-3 appearance-none
+                           focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
               >
                 <option value="">Select a property</option>
-                <option value="Emaar">Emaar</option>
-                <option value="Damac">Damac</option>
-                <option value="Danube">Danube</option>
-                <option value="Sobha">Sobha</option>
-                <option value="Binghatti">Binghatti</option>
-                <option value="Ellington">Ellington</option>
-                <option value="Nakheel">Nakheel</option>
-                <option value="Meraas">Meraas</option>
-                <option value="Azizi Developments">Azizi Developments</option>
-                <option value="Dubai Properties">Dubai Properties</option>
-                <option value="Other">Other</option>
+                <option>Emaar</option>
+                <option>Damac</option>
+                <option>Danube</option>
+                <option>Sobha</option>
+                <option>Binghatti</option>
+                <option>Ellington</option>
+                <option>Nakheel</option>
+                <option>Meraas</option>
+                <option>Azizi Developments</option>
+                <option>Dubai Properties</option>
+                <option>Other</option>
               </select>
+
+              {/* Custom Arrow */}
+              <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500">
+                ▼
+              </div>
             </div>
 
             {/* CONSENT */}
             <div className="sm:col-span-2 flex items-start gap-3 mt-2">
-              <input
-                type="checkbox"
-                name="consent_status"
-                value="Yes"
-                required
-                className="mt-1"
-              />
-              <p className="text-sm text-gray-700">
-                I authorize company representatives to Call, SMS, Email or WhatsApp
-                me about its products and offers.
+              <input type="checkbox" required className="mt-1" />
+              <p className="text-sm text-gray-700 dark:text-gray-300">
+                I authorize company representatives to contact me about its products and offers.
               </p>
             </div>
 
@@ -161,14 +159,15 @@ export default function ContactPage() {
               <button
                 disabled={loading}
                 type="submit"
-                className="w-full bg-yellow-500 hover:bg-yellow-600 disabled:opacity-60
-                           text-white py-3 rounded-lg flex items-center justify-center gap-2 transition font-medium"
+                className="w-full bg-[#C9A227] hover:bg-[#b8961f]
+                           text-white py-3 rounded-xl
+                           flex items-center justify-center gap-2
+                           transition font-medium"
               >
                 <Send size={18} />
                 {loading ? "Sending..." : "Send Enquiry"}
               </button>
 
-              {/* SUCCESS / ERROR MESSAGE */}
               {success && (
                 <p className="mt-3 text-green-600 text-sm font-medium text-center">
                   {success}
@@ -185,13 +184,14 @@ export default function ContactPage() {
           </form>
         </div>
       </section>
+
       <CTA />
       <Footer />
     </div>
   );
 }
 
-/* ---------- COMPONENTS ---------- */
+/* ================= COMPONENTS ================= */
 
 function Info({ icon, title, text }: any) {
   return (
@@ -200,8 +200,8 @@ function Info({ icon, title, text }: any) {
         {icon}
       </div>
       <div>
-        <h4 className="font-semibold">{title}</h4>
-        <p className="text-gray-700 whitespace-pre-line text-sm leading-relaxed">
+        <h4 className="font-semibold dark:text-white">{title}</h4>
+        <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line text-sm leading-relaxed">
           {text}
         </p>
       </div>
@@ -212,7 +212,7 @@ function Info({ icon, title, text }: any) {
 function Input({ label, placeholder, type = "text", name }: any) {
   return (
     <div>
-      <label className="text-sm font-medium">
+      <label className="text-sm font-medium dark:text-gray-200">
         {label} <span className="text-red-500">*</span>
       </label>
       <input
@@ -220,8 +220,11 @@ function Input({ label, placeholder, type = "text", name }: any) {
         required
         type={type}
         placeholder={placeholder}
-        className="mt-2 w-full rounded-lg border-2 border-yellow-300 px-4 py-3
-                   focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        className="mt-2 w-full rounded-xl border-2 border-[#C9A227]
+                   bg-white dark:bg-[#1f2937]
+                   text-gray-900 dark:text-white
+                   px-4 py-3
+                   focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
       />
     </div>
   );
@@ -230,20 +233,21 @@ function Input({ label, placeholder, type = "text", name }: any) {
 function InputSelect({ label, name, options }: any) {
   return (
     <div>
-      <label className="text-sm font-medium">
+      <label className="text-sm font-medium dark:text-gray-200">
         {label} <span className="text-red-500">*</span>
       </label>
       <select
         name={name}
         required
-        className="mt-2 w-full rounded-lg border-2 border-yellow-300 px-4 py-3
-                   focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white"
+        className="mt-2 w-full rounded-xl border-2 border-[#C9A227]
+                   bg-white dark:bg-[#1f2937]
+                   text-gray-900 dark:text-white
+                   px-4 py-3
+                   focus:outline-none focus:ring-2 focus:ring-[#C9A227]"
       >
         <option value="">{label}</option>
         {options.map((opt: string) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
+          <option key={opt}>{opt}</option>
         ))}
       </select>
     </div>

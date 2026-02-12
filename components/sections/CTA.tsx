@@ -3,39 +3,49 @@
 import { useState, useEffect } from "react";
 import EnquiryModal from "@/components/ui/EnquiryModal";
 
+const goldenColor = "#D4A843";
+
 export default function CtaSection() {
   const [open, setOpen] = useState(false);
 
-  // Optional: scroll lock
+  /* ===== Scroll Lock Fix ===== */
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "auto";
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   return (
     <>
       {/* ================= CTA SECTION ================= */}
-      <section className="relative py-14 md:py-22 text-white text-center">
-        
+      <section className="relative py-16 md:py-24 text-white text-center overflow-hidden">
+
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('/assets/Emar.png')" }}
         />
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-[#1E2837]/80" />
+        {/* Premium Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0F172A]/90 via-[#1E2837]/85 to-[#0F172A]/90" />
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-4">
+        <div className="relative z-10 max-w-4xl mx-auto px-6">
           <h2
-            className="text-3xl sm:text-4xl md:text-[2.75rem] leading-tight mb-5 max-w-xl mx-auto"
-            style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700 }}
+            className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-6"
+            style={{ fontFamily: "'Playfair Display', serif" }}
           >
             Ready to Find Your Dream Property?
           </h2>
 
           <p
-            className="text-sm sm:text-base mb-8 max-w-lg mx-auto leading-relaxed text-white/80"
+            className="text-base md:text-lg mb-10 max-w-2xl mx-auto text-white/80 leading-relaxed"
             style={{ fontFamily: "'DM Sans', sans-serif" }}
           >
             Let our experts guide you to the perfect investment opportunity in
@@ -45,10 +55,10 @@ export default function CtaSection() {
           {/* CTA BUTTON */}
           <button
             onClick={() => setOpen(true)}
-            className="px-8 py-3 font-semibold text-sm rounded-md transition hover:opacity-90"
+            className="px-10 py-3 rounded-md font-semibold text-black transition-all duration-300
+                       hover:scale-105 hover:shadow-xl active:scale-95"
             style={{
-              backgroundColor: "#D4A843",
-              color: "#fff",
+              backgroundColor: goldenColor,
               fontFamily: "'DM Sans', sans-serif",
             }}
           >
@@ -57,7 +67,7 @@ export default function CtaSection() {
         </div>
       </section>
 
-      {/* ================= REAL MODAL ================= */}
+      {/* ================= ENQUIRY MODAL ================= */}
       <EnquiryModal
         open={open}
         onClose={() => setOpen(false)}

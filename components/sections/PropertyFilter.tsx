@@ -20,7 +20,7 @@ export default function PropertyFilter({ communities }: Props) {
   const [maxPrice, setMaxPrice] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Close suggestion when clicking outside
+  /* ================= OUTSIDE CLICK ================= */
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -34,6 +34,7 @@ export default function PropertyFilter({ communities }: Props) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  /* ================= FILTER LOGIC ================= */
   const filteredCommunities = communities.filter(
     (c) =>
       c.name?.toLowerCase().includes(query.toLowerCase()) ||
@@ -58,7 +59,6 @@ export default function PropertyFilter({ communities }: Props) {
     router.push(`/properties?${params.toString()}`);
   };
 
-
   const resetFilters = () => {
     setQuery("");
     setCommunitySlug("");
@@ -71,11 +71,11 @@ export default function PropertyFilter({ communities }: Props) {
   };
 
   return (
-    <section className="sticky top-[80px] z-50 bg-white dark:bg-black border-b shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 py-4 overflow-visible">
-        <div className="flex flex-wrap items-center gap-3">
+    <section className="sticky top-[80px] z-50 w-full bg-white dark:bg-[#0F172A] border-b border-gray-200 dark:border-gray-800 shadow-lg transition-colors duration-300">
+      <div className="w-full px-6 py-5">
+        <div className="flex flex-wrap items-center gap-4">
 
-          {/* SEARCH */}
+          {/* ================= SEARCH ================= */}
           <div
             ref={containerRef}
             className="relative flex-1 min-w-[260px]"
@@ -89,11 +89,20 @@ export default function PropertyFilter({ communities }: Props) {
               }}
               onFocus={() => setSearchOpen(true)}
               placeholder="Community or Area"
-              className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white rounded-full px-5 py-3 focus:outline-none"
+              className="w-full border border-gray-300 dark:border-gray-700 
+                         bg-white dark:bg-[#111827] 
+                         text-black dark:text-white
+                         rounded-full px-6 py-3
+                         focus:outline-none focus:ring-2 focus:ring-[#D4AF37]
+                         transition"
             />
 
             {searchOpen && (
-              <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl max-h-60 overflow-y-auto z-[9999]">
+              <div className="absolute left-0 right-0 mt-2 
+                              bg-white dark:bg-[#111827]
+                              border border-gray-200 dark:border-gray-700
+                              rounded-2xl shadow-2xl
+                              max-h-64 overflow-y-auto z-[9999]">
 
                 {(query ? filteredCommunities : communities)
                   .slice(0, 6)
@@ -106,80 +115,112 @@ export default function PropertyFilter({ communities }: Props) {
                         setCommunitySlug(item.slug?.current || "");
                         setSearchOpen(false);
                       }}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="w-full text-left px-6 py-3
+                                 hover:bg-gray-100 dark:hover:bg-white/10
+                                 transition"
                     >
                       <p className="text-sm font-semibold text-black dark:text-white">
                         {item.name}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {item.area}
                       </p>
                     </button>
                   ))}
-
-                {query && filteredCommunities.length === 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCommunitySlug("");
-                      setSearchOpen(false);
-                    }}
-                    className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  >
-                    Search for "<strong>{query}</strong>"
-                  </button>
-                )}
               </div>
             )}
           </div>
 
-          {/* SELECTS */}
-          <select value={purpose} onChange={(e) => setPurpose(e.target.value)} className="filter-select">
-            <option value="">Buy / Rent</option>
-            <option value="buy">Buy</option>
-            <option value="rent">Rent</option>
-          </select>
+          {/* ================= SELECTS ================= */}
+          {[
+            {
+              value: purpose,
+              setter: setPurpose,
+              label: "Buy / Rent",
+              options: [
+                { label: "Buy", value: "buy" },
+                { label: "Rent", value: "rent" },
+              ],
+            },
+            {
+              value: bedroom,
+              setter: setBedroom,
+              label: "Bedrooms",
+              options: [
+                { label: "Studio", value: "studio" },
+                { label: "1 Bed", value: "1" },
+                { label: "2 Bed", value: "2" },
+                { label: "3 Bed", value: "3" },
+                { label: "4+ Bed", value: "4" },
+              ],
+            },
+            {
+              value: type,
+              setter: setType,
+              label: "Property Type",
+              options: [
+                { label: "Apartment", value: "apartment" },
+                { label: "Villa", value: "villa" },
+                { label: "Penthouse", value: "penthouse" },
+                { label: "Townhouse", value: "townhouse" },
+              ],
+            },
+            {
+              value: minPrice,
+              setter: setMinPrice,
+              label: "Min Price",
+              options: [
+                { label: "AED 500K", value: "500000" },
+                { label: "AED 1M", value: "1000000" },
+              ],
+            },
+            {
+              value: maxPrice,
+              setter: setMaxPrice,
+              label: "Max Price",
+              options: [
+                { label: "AED 5M", value: "5000000" },
+                { label: "AED 10M", value: "10000000" },
+              ],
+            },
+          ].map((item, idx) => (
+            <select
+              key={idx}
+              value={item.value}
+              onChange={(e) => item.setter(e.target.value)}
+              className="appearance-none border border-gray-300 dark:border-gray-700
+                         bg-white dark:bg-[#111827]
+                         text-black dark:text-white
+                         px-6 py-3 rounded-full min-w-[150px]
+                         focus:outline-none focus:ring-2 focus:ring-[#D4AF37]
+                         transition"
+            >
+              <option value="">{item.label}</option>
+              {item.options.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          ))}
 
-          <select value={bedroom} onChange={(e) => setBedroom(e.target.value)} className="filter-select">
-            <option value="">Bedrooms</option>
-            <option value="studio">Studio</option>
-            <option value="1">1 Bed</option>
-            <option value="2">2 Bed</option>
-            <option value="3">3 Bed</option>
-            <option value="4">4+ Bed</option>
-          </select>
-
-          <select value={type} onChange={(e) => setType(e.target.value)} className="filter-select">
-            <option value="">Property Type</option>
-            <option value="apartment">Apartment</option>
-            <option value="villa">Villa</option>
-            <option value="penthouse">Penthouse</option>
-            <option value="townhouse">Townhouse</option>
-          </select>
-
-          <select value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="filter-select">
-            <option value="">Min Price</option>
-            <option value="500000">AED 500K</option>
-            <option value="1000000">AED 1M</option>
-          </select>
-
-          <select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="filter-select">
-            <option value="">Max Price</option>
-            <option value="5000000">AED 5M</option>
-            <option value="10000000">AED 10M</option>
-          </select>
-
-          {/* BUTTONS */}
+          {/* ================= BUTTONS ================= */}
           <button
             onClick={applyFilters}
-            className="bg-[#D4AF37] text-white px-6 py-3 rounded-full whitespace-nowrap"
+            className="bg-[#D4AF37] hover:bg-[#c19d2f]
+                       text-white px-7 py-3 rounded-full
+                       transition font-medium"
           >
             Find
           </button>
 
           <button
             onClick={resetFilters}
-            className="border border-[#D4AF37] text-[#D4AF37] px-6 py-3 rounded-full whitespace-nowrap"
+            className="border border-[#D4AF37]
+                       text-[#D4AF37]
+                       hover:bg-[#D4AF37] hover:text-white
+                       px-7 py-3 rounded-full
+                       transition font-medium"
           >
             Reset
           </button>

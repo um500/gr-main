@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 /* ================= TYPES ================= */
@@ -39,22 +39,21 @@ export default function Hero({
   ctaText,
   communities = [],
 }: HeroProps) {
-  /* 🔥 SAFEST SLIDE SELECTION */
-  const validSlides =
-    slides.filter((s) => s?.image?.asset?.url) || [];
+  const router = useRouter();
+  const searchRef = useRef<HTMLDivElement>(null);
 
+  /* ================= SAFE SLIDES ================= */
+
+  const validSlides = slides.filter((s) => s?.image?.asset?.url);
   const activeSlides =
-    validSlides.filter((s) => s.active) ||
-    validSlides;
-
+    validSlides.filter((s) => s.active) || validSlides;
   const slidesToUse =
     activeSlides.length > 0 ? activeSlides : validSlides;
 
-  /* 🛑 FINAL SAFETY */
   if (!slidesToUse || slidesToUse.length === 0) {
     return (
-      <section className="h-[80vh] flex items-center justify-center bg-gray-100">
-        <p className="text-gray-500 text-lg">
+      <section className="h-[80vh] flex items-center justify-center bg-gray-100 dark:bg-[#0F172A] transition-colors duration-300">
+        <p className="text-gray-500 dark:text-gray-400 text-lg">
           Hero content loading…
         </p>
       </section>
@@ -67,43 +66,31 @@ export default function Hero({
   const [prevIndex, setPrevIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const [buyType, setBuyType] = useState<"BUY" | "RENT">("BUY");
-  const [showBuyMenu, setShowBuyMenu] = useState(false);
-
+  const [buyType, setBuyType] = useState<"buy" | "rent">("buy");
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
-
-  const searchRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
 
   /* ================= SLIDER ================= */
 
   const changeSlide = (newIndex: number) => {
     if (isAnimating || slidesToUse.length < 2) return;
+
     setPrevIndex(index);
     setIsAnimating(true);
     setIndex(newIndex);
+
     setTimeout(() => setIsAnimating(false), 700);
   };
 
-  const handleSearch = () => {
-    if (!query.trim()) return;
-
-    router.push(
-      `/properties?community=${encodeURIComponent(query)}&purpose=${buyType}`
-    );
-
-    setShowSuggestions(false);
-  };
-
-
   useEffect(() => {
     if (slidesToUse.length < 2) return;
+
     const timer = setInterval(() => {
       changeSlide((index + 1) % slidesToUse.length);
-    }, 4500);
+    }, 5000);
+
     return () => clearInterval(timer);
-  }, [index, slidesToUse.length, isAnimating]);
+  }, [index, slidesToUse.length]);
 
   /* ================= OUTSIDE CLICK ================= */
 
@@ -111,29 +98,37 @@ export default function Hero({
     function handleClickOutside(e: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setShowSuggestions(false);
-        setShowBuyMenu(false);
       }
     }
     document.addEventListener("click", handleClickOutside);
-    return () =>
-      document.removeEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   /* ================= FILTER ================= */
 
   const filtered = query.trim()
     ? communities.filter(
-      (c) =>
-        c.name.toLowerCase().includes(query.toLowerCase()) ||
-        c.area.toLowerCase().includes(query.toLowerCase())
-    )
+        (c) =>
+          c.name.toLowerCase().includes(query.toLowerCase()) ||
+          c.area.toLowerCase().includes(query.toLowerCase())
+      )
     : communities.slice(0, 6);
+
+  const handleSearch = () => {
+    if (!query.trim()) return;
+
+    router.push(
+      `/properties?search=${encodeURIComponent(query)}&purpose=${buyType}`
+    );
+
+    setShowSuggestions(false);
+  };
 
   /* ================= JSX ================= */
 
   return (
-    <section className="relative h-[90vh] w-full overflow-hidden">
-      {/* IMAGE SLIDER */}
+    <section className="relative h-[90vh] w-full text-white overflow-hidden">
+      {/* ================= IMAGE SLIDER ================= */}
       <div className="absolute inset-0">
         {slidesToUse.map((slide, i) => {
           const imageUrl =
@@ -142,12 +137,13 @@ export default function Hero({
           return (
             <div
               key={i}
-              className={`absolute inset-0 transition-transform duration-700 ${i === index
-                ? "translate-x-0 z-[1]"
-                : i === prevIndex
+              className={`absolute inset-0 transition-transform duration-700 ${
+                i === index
+                  ? "translate-x-0 z-[1]"
+                  : i === prevIndex
                   ? "-translate-x-full"
                   : "translate-x-full"
-                }`}
+              }`}
             >
               <img
                 src={imageUrl}
@@ -157,30 +153,38 @@ export default function Hero({
             </div>
           );
         })}
-        <div className="absolute inset-0 bg-black/40 z-[2]" />
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/50 z-[2]" />
       </div>
 
-      {/* CONTENT */}
+      {/* ================= CONTENT ================= */}
       <div className="relative z-10 h-full flex items-center">
-        <div className="max-w-5xl text-white px-4 md:ml-36">
-          <h1 className="text-5xl font-serif">
+        <div className="max-w-5xl px-6 md:ml-36 w-full">
+          <h1 className="text-4xl md:text-6xl font-serif font-bold">
             {slidesToUse[index].title}
           </h1>
 
           {slidesToUse[index].subtitle && (
-            <p className="mt-2">
+            <p className="mt-4 text-gray-200 text-lg">
               {slidesToUse[index].subtitle}
             </p>
           )}
 
-          <button className="mt-6 border px-6 py-3">
+          <button
+            className="mt-8 px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition"
+          >
             {ctaText}
           </button>
 
-          {/* SEARCH */}
-          <div ref={searchRef} className="relative mt-10 w-full max-w-xl px-2 sm:px-0">
-            <div className="bg-white flex items-center w-full p-2 rounded-lg text-gray-900 overflow-hidden">
-
+          {/* ================= SEARCH ================= */}
+          <div
+            ref={searchRef}
+            className="relative mt-10 w-full max-w-xl"
+          >
+            <div className="flex items-center bg-white dark:bg-[#1E293B] 
+                            text-gray-900 dark:text-white 
+                            rounded-xl shadow-xl overflow-hidden transition-colors duration-300">
 
               <input
                 value={query}
@@ -190,44 +194,47 @@ export default function Hero({
                 }}
                 onFocus={() => setShowSuggestions(true)}
                 placeholder="Community or Building"
-                className="flex-1 min-w-0 px-2 outline-none bg-transparent text-sm"
+                className="flex-1 px-4 py-3 bg-transparent outline-none text-sm"
               />
 
               <button
-                onClick={() => {
-                  if (!query.trim()) return;
-
-                  router.push(
-                    `/properties?community=${encodeURIComponent(
-                      query
-                    )}&purpose=${buyType}`
-                  );
-                }}
-                className="ml-2 px-4 py-2 bg-[#C9A227] cursor-pointer hover:bg-[#b8921e] text-white text-sm rounded-md transition-all duration-300 flex-shrink-0"
+                onClick={handleSearch}
+                className="px-6 py-3 text-white text-sm font-medium transition"
+                style={{ backgroundColor: goldenColor }}
               >
                 Search
               </button>
-
-
-
-
             </div>
 
+            {/* ================= SUGGESTIONS ================= */}
             {showSuggestions && filtered.length > 0 && (
-              <div className="absolute left-0 top-full w-full bg-white shadow-2xl z-[9999] text-black">
+              <div className="absolute left-0 top-full w-full 
+                              bg-white dark:bg-[#1E293B] 
+                              shadow-2xl rounded-xl mt-2 
+                              z-[9999] overflow-hidden transition-colors duration-300">
 
                 {filtered.map((c) => (
                   <div
                     key={c._id}
                     onClick={() => {
-                      window.location.href = `/properties?search=${encodeURIComponent(c.name)}&mode=${buyType}`;
+                      router.push(
+                        `/properties?search=${encodeURIComponent(
+                          c.name
+                        )}&purpose=${buyType}`
+                      );
+                      setShowSuggestions(false);
                     }}
-                    className="px-4 py-3 cursor-pointer hover:bg-amber-50 text-black"
+                    className="px-4 py-3 cursor-pointer 
+                               hover:bg-amber-50 
+                               dark:hover:bg-white/10 transition"
                   >
-                    <p className="font-medium text-black">{c.name}</p>
-                    <p className="text-sm text-black">{c.area}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {c.name}
+                    </p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {c.area}
+                    </p>
                   </div>
-
                 ))}
               </div>
             )}
@@ -235,14 +242,16 @@ export default function Hero({
         </div>
       </div>
 
-      {/* ARROWS */}
+      {/* ================= ARROWS ================= */}
       <button
         onClick={() =>
           changeSlide(
             (index - 1 + slidesToUse.length) % slidesToUse.length
           )
         }
-        className="absolute left-6 top-1/2 z-20 bg-black/40 p-3 rounded-full text-white"
+        className="absolute left-6 top-1/2 z-20 
+                   bg-black/40 p-3 rounded-full 
+                   text-white hover:bg-black/60 transition"
       >
         <ChevronLeft />
       </button>
@@ -251,7 +260,9 @@ export default function Hero({
         onClick={() =>
           changeSlide((index + 1) % slidesToUse.length)
         }
-        className="absolute right-6 top-1/2 z-20 bg-black/40 p-3 rounded-full text-white"
+        className="absolute right-6 top-1/2 z-20 
+                   bg-black/40 p-3 rounded-full 
+                   text-white hover:bg-black/60 transition"
       >
         <ChevronRight />
       </button>

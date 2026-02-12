@@ -10,10 +10,11 @@ export default async function BlogPage() {
   const blogs = await sanityClient.fetch(allBlogsQuery);
 
   return (
-    <main>
+    <main className="bg-white dark:bg-[#0F172A] transition-colors duration-300">
+
       {/* ================= HERO ================= */}
-      <section className="relative h-[320px] md:h-[420px] flex items-center justify-center text-center text-white">
-        {/* Background Image */}
+      <section className="relative h-[320px] md:h-[420px] flex items-center justify-center text-center text-white overflow-hidden">
+        
         <img
           src="/assets/hero-1.jpg"
           alt="Blog Hero Background"
@@ -21,11 +22,13 @@ export default async function BlogPage() {
         />
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="absolute inset-0 bg-black/60" />
 
         {/* Content */}
         <div className="relative z-10 max-w-2xl px-4">
-          <h1 className="text-4xl md:text-5xl font-bold">Our Blog</h1>
+          <h1 className="text-4xl md:text-5xl font-bold">
+            Our Blog
+          </h1>
           <p className="mt-4 text-gray-200">
             Latest insights, updates & real estate stories
           </p>
@@ -33,24 +36,37 @@ export default async function BlogPage() {
       </section>
 
       {/* ================= BLOG LIST ================= */}
-      <section className="py-20 bg-[#F9FAFB]">
-  <div className="max-w-7xl mx-auto px-6">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      {blogs.map((blog: any) => (
-        <BlogCard
-          key={blog._id}
-          blog={{
-            title: blog.title,
-            subtitle: blog.subtitle,
-            excerpt: blog.excerpt,
-            slug: blog.slug,
-            mainImage: blog.mainImage,
-          }}
-        />
-      ))}
-    </div>
-  </div>
-</section>
+      <section className="py-20 bg-white dark:bg-[#0F172A] transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-6">
+
+          {blogs.length === 0 ? (
+            <div className="text-center py-20">
+              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                No blogs found
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 mt-3">
+                Please check back later.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+              {blogs.map((blog: any) => (
+                <BlogCard
+                  key={blog._id}
+                  blog={{
+                    title: blog.title,
+                    subtitle: blog.subtitle,
+                    excerpt: blog.excerpt,
+                    slug: blog.slug?.current || blog.slug,
+                    mainImage: blog.mainImage,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+
+        </div>
+      </section>
 
       <CTA />
       <Footer />
