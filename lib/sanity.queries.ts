@@ -60,7 +60,6 @@ export const featuredPropertiesQuery = groq`
 export const propertiesQuery = groq`
 *[
   _type == "property" &&
-
   (!defined($community) || location->slug.current == $community) &&
   (!defined($search) || 
     title match $search + "*" ||
@@ -120,6 +119,40 @@ export const propertyBySlugQuery = groq`
     name,
     "slug": slug.current
   },
+
+  location->{
+    name,
+    "slug": slug.current
+  },
+
+  images[]{
+    asset->{ url }
+  },
+
+  units[]{
+    beds,
+    size,
+    price
+  },
+
+  brochure{
+    asset->{ url }
+  }
+}
+`;
+
+/* ======================================================
+   ✅ PROPERTIES BY DEVELOPER (MISSING FIX)
+====================================================== */
+
+export const propertiesByDeveloperQuery = groq`
+*[_type == "property" && developer->slug.current == $slug]
+| order(_createdAt desc){
+  _id,
+  title,
+  "slug": slug.current,
+  handover,
+  featured,
 
   location->{
     name,
@@ -211,7 +244,6 @@ export const allBlogsQuery = groq`
 }
 `;
 
-/* ✅ FIXED VERSION (IMPORTANT) */
 export const getSingleBlogQuery = groq`
 *[_type == "blog" && slug.current == $slug][0]{
   _id,
