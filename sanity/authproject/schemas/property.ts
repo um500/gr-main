@@ -33,7 +33,7 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    // ================= LOCATION (✅ FIXED HERE) =================
+    // ================= LOCATION =================
     defineField({
       name: "location",
       title: "Community",
@@ -53,6 +53,17 @@ export default defineType({
           options: { hotspot: true },
         },
       ],
+    }),
+
+    // ================= BROCHURE PDF (NEW) =================
+    defineField({
+      name: "brochure",
+      title: "Brochure PDF",
+      type: "file",
+      options: {
+        accept: ".pdf",
+      },
+      description: "Upload property brochure PDF here",
     }),
 
     // ================= AVAILABLE UNITS =================

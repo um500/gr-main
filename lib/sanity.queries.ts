@@ -20,31 +20,45 @@ export const homepageHeroQuery = groq`
 }
 `;
 
+/* ======================================================
+   FEATURED PROPERTIES (HOME – TOP 4)
+====================================================== */
 
-/* 🔥 FEATURED PROPERTIES (HOME PAGE – TOP 4 ONLY) */
 export const featuredPropertiesQuery = groq`
 *[_type == "property"]
 | order(_createdAt desc)
 [0..3]{
   _id,
   title,
-  slug,
-  location,
-  type,
+  "slug": slug.current,
   handover,
-  images[]{
-    asset->{url}
+  featured,
+
+  location->{
+    name,
+    "slug": slug.current
   },
+
+  images[]{
+    asset->{ url }
+  },
+
   units[]{
     beds,
     size,
     price
+  },
+
+  brochure{
+    asset->{
+      url
+    }
   }
 }
 `;
 
 /* ======================================================
-   PROPERTIES PAGE (ALL PROPERTIES)
+   ALL PROPERTIES (FILTER PAGE)
 ====================================================== */
 
 export const propertiesQuery = groq`
@@ -73,12 +87,11 @@ export const propertiesQuery = groq`
   (!defined($max) ||
     count(units[price <= $max]) > 0
   )
-
 ]
 | order(_createdAt desc){
   _id,
   title,
-  slug,
+  "slug": slug.current,
   featured,
   handover,
   purpose,
@@ -90,23 +103,67 @@ export const propertiesQuery = groq`
   },
 
   images[]{
-    asset->{url}
+    asset->{ url }
   },
 
   units[]{
     beds,
     size,
     price
+  },
+
+  brochure{
+    asset->{
+      url
+    }
   }
 }
 `;
 
+/* ======================================================
+   SINGLE PROPERTY (DETAIL PAGE)
+====================================================== */
 
+export const propertyBySlugQuery = groq`
+*[_type == "property" && slug.current == $slug][0]{
+  _id,
+  title,
+  "slug": slug.current,
+  handover,
+  featured,
+  purpose,
+  type,
 
+  developer->{
+    name,
+    "slug": slug.current
+  },
 
+  location->{
+    name,
+    "slug": slug.current
+  },
+
+  images[]{
+    asset->{ url }
+  },
+
+  units[]{
+    beds,
+    size,
+    price
+  },
+
+  brochure{
+    asset->{
+      url
+    }
+  }
+}
+`;
 
 /* ======================================================
-   DEVELOPER PAGE (PROPERTIES BY DEVELOPER)
+   PROPERTIES BY DEVELOPER
 ====================================================== */
 
 export const propertiesByDeveloperQuery = groq`
@@ -114,23 +171,35 @@ export const propertiesByDeveloperQuery = groq`
 | order(_createdAt desc){
   _id,
   title,
-  slug,
-  location,
+  "slug": slug.current,
   handover,
   featured,
-  images[]{
-    asset->{url}
+
+  location->{
+    name,
+    "slug": slug.current
   },
+
+  images[]{
+    asset->{ url }
+  },
+
   units[]{
     beds,
     size,
     price
+  },
+
+  brochure{
+    asset->{
+      url
+    }
   }
 }
 `;
 
 /* ======================================================
-   SEARCH / COMMUNITY
+   COMMUNITIES
 ====================================================== */
 
 export const communitiesQuery = groq`
@@ -138,27 +207,23 @@ export const communitiesQuery = groq`
   _id,
   name,
   area,
-  slug {
-    current
-  }
+  "slug": slug.current
 }
 `;
 
-
-
-
-/* SEARCH SUGGESTION (COMMUNITY AUTOCOMPLETE) */
 export const searchSuggestionQuery = groq`
 *[_type == "community"]
 | order(name asc){
   _id,
   name,
   area,
-  slug{
-    current
-  }
+  "slug": slug.current
 }
 `;
+
+/* ======================================================
+   DEVELOPERS
+====================================================== */
 
 export const featuredDevelopersQuery = groq`
 *[_type == "developer" && featured == true]
@@ -166,68 +231,76 @@ export const featuredDevelopersQuery = groq`
 [0...3]{
   _id,
   name,
-  slug,
+  "slug": slug.current,
   shortDescription,
   "logo": logo.asset->url,
   "heroImage": heroImage.asset->url
 }
 `;
 
-export const allDevelopersQuery = `
+export const allDevelopersQuery = groq`
 *[_type == "developer"]
 | order(name asc){
   _id,
   name,
-  slug,
+  "slug": slug.current,
   shortDescription,
   "logo": logo.asset->url,
   "heroImage": heroImage.asset->url
 }
 `;
 
-export const allBlogsQuery = `
+/* ======================================================
+   BLOGS
+====================================================== */
+
+export const allBlogsQuery = groq`
 *[_type == "blog"]{
   _id,
   title,
   subtitle,
   excerpt,
   "slug": slug.current,
-  mainImage
+  mainImage{
+    asset->{ url }
+  }
 }
 `;
 
-
-export const getSingleBlogQuery = (slug: string) => groq`
-*[_type == "blog" && slug.current == "${slug}"][0]{
+export const getSingleBlogQuery = groq`
+*[_type == "blog" && slug.current == $slug][0]{
   title,
   subtitle,
   content,
-  mainImage
+  mainImage{
+    asset->{ url }
+  }
 }
 `;
 
-// ================= MEDIA PAGE QUERY =================
+/* ======================================================
+   MEDIA
+====================================================== */
 
-export const mediaQuery = `
-*[_type == "media"] | order(_createdAt desc){
+export const mediaQuery = groq`
+*[_type == "media"] 
+| order(_createdAt desc){
   _id,
   title,
   mediaType,
   location,
 
-  // IMAGE TYPE (ARRAY OF IMAGES)
   images[]{
-    asset->{
-      _id,
-      url
-    }
+    asset->{ url }
   },
 
-  // VIDEO TYPE (YOUTUBE)
   youtubeUrl
 }
 `;
 
+/* ======================================================
+   ANNOUNCEMENTS
+====================================================== */
 
 export const announcementQuery = groq`
 *[_type == "announcement"]
@@ -238,5 +311,3 @@ export const announcementQuery = groq`
   "slug": slug.current
 }
 `;
-
-
