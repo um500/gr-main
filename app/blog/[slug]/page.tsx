@@ -6,14 +6,16 @@ import CTA from "@/components/sections/CTA";
 import Footer from "@/components/layout/Footer";
 
 type PageProps = {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 };
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug } = params;
 
+  // ✅ FIXED HERE
   const blog = await sanityClient.fetch(
-    getSingleBlogQuery(slug)
+    getSingleBlogQuery,
+    { slug }
   );
 
   if (!blog) {
@@ -38,10 +40,8 @@ export default async function Page({ params }: PageProps) {
           />
         )}
 
-        {/* Overlay */}
         <div className="absolute inset-0 bg-black/60" />
 
-        {/* Content */}
         <div className="relative z-10 max-w-4xl px-6">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             {blog.title}
@@ -96,13 +96,11 @@ export default async function Page({ params }: PageProps) {
               },
             }}
           />
-
         </div>
       </section>
 
       <CTA />
       <Footer />
-
     </main>
   );
 }

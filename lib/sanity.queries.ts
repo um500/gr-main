@@ -269,6 +269,7 @@ export const allBlogsQuery = groq`
 
 export const getSingleBlogQuery = groq`
 *[_type == "blog" && slug.current == $slug][0]{
+  _id,
   title,
   subtitle,
   content,
@@ -277,6 +278,7 @@ export const getSingleBlogQuery = groq`
   }
 }
 `;
+
 
 /* ======================================================
    MEDIA
