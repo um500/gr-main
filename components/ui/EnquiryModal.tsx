@@ -34,12 +34,15 @@ export default function EnquiryModal({
           <X size={22} />
         </button>
 
-        <h2 className="text-2xl font-serif mb-6 text-center cursor-pointer">
+        <h2 className="text-2xl font-serif mb-6 text-center">
           Send Your Enquiry
         </h2>
 
         {/* FORM */}
-        <EnquiryForm defaultProperty={propertyName} />
+        <EnquiryForm
+          defaultProperty={propertyName}
+          onClose={onClose}
+        />
       </div>
     </div>
   );

@@ -50,16 +50,30 @@ export const featuredPropertiesQuery = groq`
 export const propertiesQuery = groq`
 *[
   _type == "property" &&
+
   (!defined($community) || location->slug.current == $community) &&
-  (!defined($type) || type == $type) &&
-  (
-    !defined($min) ||
-    units[].price >= $min
+
+  (!defined($search) || 
+    title match $search + "*" ||
+    location->name match $search + "*"
   ) &&
-  (
-    !defined($max) ||
-    units[].price <= $max
+
+  (!defined($purpose) || purpose == $purpose) &&
+
+  (!defined($type) || type == $type) &&
+
+  (!defined($bed) ||
+    count(units[beds == $bed]) > 0
+  ) &&
+
+  (!defined($min) ||
+    count(units[price >= $min]) > 0
+  ) &&
+
+  (!defined($max) ||
+    count(units[price <= $max]) > 0
   )
+
 ]
 | order(_createdAt desc){
   _id,
@@ -67,8 +81,9 @@ export const propertiesQuery = groq`
   slug,
   featured,
   handover,
+  purpose,
+  type,
 
-  // ✅ IMPORTANT FIX
   location->{
     name,
     "slug": slug.current
@@ -85,6 +100,9 @@ export const propertiesQuery = groq`
   }
 }
 `;
+
+
+
 
 
 /* ======================================================
@@ -135,9 +153,13 @@ export const searchSuggestionQuery = groq`
 | order(name asc){
   _id,
   name,
-  area
+  area,
+  slug{
+    current
+  }
 }
 `;
+
 export const featuredDevelopersQuery = groq`
 *[_type == "developer" && featured == true]
 | order(_createdAt asc)
@@ -207,12 +229,14 @@ export const mediaQuery = `
 `;
 
 
-
-
 export const announcementQuery = groq`
-  *[_type == "announcement"]{
-    title,
-    eventDate,
-    city
-  }
+*[_type == "announcement"]
+| order(_createdAt desc){
+  title,
+  eventDate,
+  city,
+  "slug": slug.current
+}
 `;
+
+

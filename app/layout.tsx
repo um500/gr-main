@@ -5,6 +5,7 @@ import "./globals.css";
 import NavbarServer from "@/components/layout/NavbarServer";
 import Footer from "@/components/layout/Footer";
 import { FloatingButtons } from "@/components/ui/FloatingButtons";
+import AnnouncementBar from "@/components/layout/AnnouncementBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +31,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+
+        <AnnouncementBar />
         {/* Global Navbar */}
         <NavbarServer />
 
 
         {/* Page Content */}
-        <main className="flex-1">{children}</main>
+        <main className="w-full">{children}</main>
 
         
 

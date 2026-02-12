@@ -1,216 +1,191 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-type Community = {
-  _id: string;
-  name: string;
-  area: string;
-  slug: {
-    current: string;
-  };
-};
 interface Props {
   communities: any[];
-  initialCommunity?: string;
-  initialPurpose?: string;
 }
 
-
-export default function PropertyFilter({
-  communities,
-  initialCommunity = "",
-  initialPurpose = "BUY",
-}: Props) {
+export default function PropertyFilter({ communities }: Props) {
   const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // ================= STATE =================
-  const [community, setCommunity] = useState(initialCommunity);
-  const [purpose, setPurpose] = useState(initialPurpose);
-  const [query, setQuery] = useState("");                 // UI text
-  const [communitySlug, setCommunitySlug] = useState(""); // ✅ actual filter value
-  const [open, setOpen] = useState(false);
-
+  const [query, setQuery] = useState("");
+  const [communitySlug, setCommunitySlug] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [bedroom, setBedroom] = useState("");
   const [type, setType] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [filterOpen, setFilterOpen] = useState(false);
-const [searchOpen, setSearchOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
+  // Close suggestion when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  // ================= FILTERED COMMUNITIES =================
   const filteredCommunities = communities.filter(
     (c) =>
-      c.name.toLowerCase().includes(query.toLowerCase()) ||
-      c.area.toLowerCase().includes(query.toLowerCase())
+      c.name?.toLowerCase().includes(query.toLowerCase()) ||
+      c.area?.toLowerCase().includes(query.toLowerCase())
   );
+
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+
+    if (communitySlug) {
+      params.set("community", communitySlug);
+    } else if (query.trim()) {
+      params.set("search", query.trim());
+    }
+
+    if (purpose) params.set("purpose", purpose);
+    if (bedroom) params.set("bed", bedroom);
+    if (type) params.set("type", type);
+    if (minPrice) params.set("min", minPrice);
+    if (maxPrice) params.set("max", maxPrice);
+
+    router.push(`/properties?${params.toString()}`);
+  };
 
 
   const resetFilters = () => {
     setQuery("");
     setCommunitySlug("");
     setPurpose("");
+    setBedroom("");
     setType("");
     setMinPrice("");
     setMaxPrice("");
-    setOpen(false);
-
-    router.push("/properties"); // 🔥 URL reset
+    router.push("/properties");
   };
 
-  // ================= AUTO APPLY FILTER =================
-  useEffect(() => {
-    const params = new URLSearchParams();
-
-    if (communitySlug) params.set("community", communitySlug); // ✅ SLUG
-    if (purpose) params.set("purpose", purpose);
-    if (type) params.set("type", type);
-    if (minPrice) params.set("min", minPrice);
-    if (maxPrice) params.set("max", maxPrice);
-
-    router.push(`/properties?${params.toString()}`);
-  }, [communitySlug, purpose, type, minPrice, maxPrice, router]);
-
   return (
-    <section className="bg-[#FAF9F7] py-4 sticky top-0 z-50 border-b mb-6 transition-all duration-300">
-  <div className="max-w-7xl mx-auto px-4">
+    <section className="sticky top-[80px] z-50 bg-white dark:bg-black border-b shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 py-4 overflow-visible">
+        <div className="flex flex-wrap items-center gap-3">
 
-    {/* ===== TOP ROW ===== */}
-    <div className="flex items-center gap-3">
+          {/* SEARCH */}
+          <div
+            ref={containerRef}
+            className="relative flex-1 min-w-[260px]"
+          >
+            <input
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setCommunitySlug("");
+                setSearchOpen(true);
+              }}
+              onFocus={() => setSearchOpen(true)}
+              placeholder="Community or Area"
+              className="w-full border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-black dark:text-white rounded-full px-5 py-3 focus:outline-none"
+            />
 
-      {/* SEARCH */}
-      <div className="relative flex-1 z-50">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C9A24D]">
-          🔍
-        </span>
+            {searchOpen && (
+              <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl max-h-60 overflow-y-auto z-[9999]">
 
-        <input
-  value={query}
-  onChange={(e) => {
-    setQuery(e.target.value);
-    setCommunitySlug("");
-    setSearchOpen(true);
-  }}
-  onFocus={() => setSearchOpen(true)}
-  onBlur={() => {
-    setTimeout(() => setSearchOpen(false), 200);
-  }}
-  placeholder="Community or Area"
-  className="w-full bg-white border border-[#E6D3A3] rounded-full pl-11 pr-4 py-3 text-sm focus:outline-none shadow-sm"
-/>
+                {(query ? filteredCommunities : communities)
+                  .slice(0, 6)
+                  .map((item) => (
+                    <button
+                      key={item._id}
+                      type="button"
+                      onClick={() => {
+                        setQuery(item.name);
+                        setCommunitySlug(item.slug?.current || "");
+                        setSearchOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      <p className="text-sm font-semibold text-black dark:text-white">
+                        {item.name}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {item.area}
+                      </p>
+                    </button>
+                  ))}
 
+                {query && filteredCommunities.length === 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCommunitySlug("");
+                      setSearchOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-3 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    Search for "<strong>{query}</strong>"
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
 
-        {searchOpen && (
-  <div className="absolute left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-[#E6D3A3] max-h-64 overflow-y-auto z-[99999]">
+          {/* SELECTS */}
+          <select value={purpose} onChange={(e) => setPurpose(e.target.value)} className="filter-select">
+            <option value="">Buy / Rent</option>
+            <option value="buy">Buy</option>
+            <option value="rent">Rent</option>
+          </select>
 
-    {(query ? filteredCommunities : communities)
-      .slice(0, 6)
-      .map((item) => (
-        <button
-          key={item._id}
-          onClick={() => {
-            setQuery(item.name);
-            setCommunitySlug(item.slug?.current || "");
-            setSearchOpen(false);
-          }}
-          className="w-full text-left px-4 py-3 hover:bg-[#FAF9F7]"
-        >
-          <p className="text-sm font-medium">{item.name}</p>
-          <p className="text-xs text-gray-500">{item.area}</p>
-        </button>
-      ))}
+          <select value={bedroom} onChange={(e) => setBedroom(e.target.value)} className="filter-select">
+            <option value="">Bedrooms</option>
+            <option value="studio">Studio</option>
+            <option value="1">1 Bed</option>
+            <option value="2">2 Bed</option>
+            <option value="3">3 Bed</option>
+            <option value="4">4+ Bed</option>
+          </select>
 
-    {query && filteredCommunities.length === 0 && (
-      <p className="px-4 py-3 text-sm text-gray-500">
-        No results found
-      </p>
-    )}
-  </div>
-)}
+          <select value={type} onChange={(e) => setType(e.target.value)} className="filter-select">
+            <option value="">Property Type</option>
+            <option value="apartment">Apartment</option>
+            <option value="villa">Villa</option>
+            <option value="penthouse">Penthouse</option>
+            <option value="townhouse">Townhouse</option>
+          </select>
 
+          <select value={minPrice} onChange={(e) => setMinPrice(e.target.value)} className="filter-select">
+            <option value="">Min Price</option>
+            <option value="500000">AED 500K</option>
+            <option value="1000000">AED 1M</option>
+          </select>
+
+          <select value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} className="filter-select">
+            <option value="">Max Price</option>
+            <option value="5000000">AED 5M</option>
+            <option value="10000000">AED 10M</option>
+          </select>
+
+          {/* BUTTONS */}
+          <button
+            onClick={applyFilters}
+            className="bg-[#D4AF37] text-white px-6 py-3 rounded-full whitespace-nowrap"
+          >
+            Find
+          </button>
+
+          <button
+            onClick={resetFilters}
+            className="border border-[#D4AF37] text-[#D4AF37] px-6 py-3 rounded-full whitespace-nowrap"
+          >
+            Reset
+          </button>
+
+        </div>
       </div>
-
-      {/* FILTER TOGGLE */}
-      <button
-        onClick={() => setFilterOpen(!filterOpen)}
-        className="w-12 h-12 flex items-center justify-center bg-white border border-[#D4AF37] rounded-full shadow-sm"
-      >
-        ☰
-      </button>
-    </div>
-
-    {/* FIND + RESET (only when filter closed) */}
-    {!filterOpen && (
-      <div className="flex gap-3 mt-4">
-        <button className="flex-1 bg-[#D4AF37] text-white py-3 rounded-full font-semibold shadow-md">
-          Find
-        </button>
-
-        <button
-          onClick={resetFilters}
-          className="flex-1 border border-[#D4AF37] text-[#D4AF37] py-3 rounded-full font-semibold"
-        >
-          Reset
-        </button>
-      </div>
-    )}
-
-    {/* FILTER PANEL */}
-    {filterOpen && (
-      <div className="mt-4 bg-white/95 backdrop-blur-lg p-5 rounded-2xl shadow-2xl space-y-4 border border-[#E6D3A3]">
-
-        <select
-          className="luxury-filter w-full"
-          value={purpose}
-          onChange={(e) => setPurpose(e.target.value)}
-        >
-          <option value="">Buy / Rent</option>
-          <option value="buy">Buy</option>
-          <option value="rent">Rent</option>
-        </select>
-
-        <select
-          className="luxury-filter w-full"
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-        >
-          <option value="">Property Type</option>
-          <option value="apartment">Apartment</option>
-          <option value="villa">Villa</option>
-          <option value="penthouse">Penthouse</option>
-          <option value="townhouse">Townhouse</option>
-          <option value="studio">Studio</option>
-        </select>
-
-        <select
-          className="luxury-filter w-full"
-          value={minPrice}
-          onChange={(e) => setMinPrice(e.target.value)}
-        >
-          <option value="">Min Price</option>
-          <option value="500000">AED 500K</option>
-          <option value="1000000">AED 1M</option>
-          <option value="2000000">AED 2M</option>
-        </select>
-
-        <select
-          className="luxury-filter w-full"
-          value={maxPrice}
-          onChange={(e) => setMaxPrice(e.target.value)}
-        >
-          <option value="">Max Price</option>
-          <option value="5000000">AED 5M</option>
-          <option value="10000000">AED 10M</option>
-          <option value="20000000">AED 20M+</option>
-        </select>
-
-      </div>
-    )}
-
-  </div>
-</section>
-
-
+    </section>
   );
 }

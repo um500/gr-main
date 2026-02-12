@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Building2, Users, Award, ShieldCheck } from "lucide-react";
 import { Target, Eye } from "lucide-react";
 import { Heart, Globe } from "lucide-react";
+import CTA from "@/components/sections/CTA";
 
 const goldenColor = "#C9A227";
 
@@ -485,29 +486,7 @@ export default function AboutPage() {
 
 
             {/* ================= CTA IMAGE ================= */}
-            <section className="relative h-[50vh]">
-                <Image
-                    src="/assets/hero-3.jpg"
-                    alt="Let’s Work Together"
-                    fill
-                    className="object-cover"
-                />
-                <div className="absolute inset-0 bg-black/60" />
-
-                <div className="relative z-10 h-full flex flex-col items-center justify-center text-white text-center px-6">
-                    <h2 className="text-4xl font-serif">
-                        Let’s Work Together
-                    </h2>
-                    <p className="mt-3 max-w-xl text-gray-200">
-                        Ready to explore your options? Our team is here to help you
-                        every step of the way.
-                    </p>
-
-                    <button className="mt-6 bg-yellow-500 px-6 py-3 rounded-md text-black font-medium">
-                        Get in Touch
-                    </button>
-                </div>
-            </section>
+            <CTA />
 
             <Footer />
         </>

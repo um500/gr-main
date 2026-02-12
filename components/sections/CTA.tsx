@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import EnquiryForm from "@/components/forms/EnquiryForm";
+import EnquiryModal from "@/components/ui/EnquiryModal";
 
 export default function CtaSection() {
   const [open, setOpen] = useState(false);
 
-  // 🔒 Background scroll lock when modal open
+  // Optional: scroll lock
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "auto";
   }, [open]);
@@ -15,6 +15,7 @@ export default function CtaSection() {
     <>
       {/* ================= CTA SECTION ================= */}
       <section className="relative py-14 md:py-22 text-white text-center">
+        
         {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -56,31 +57,11 @@ export default function CtaSection() {
         </div>
       </section>
 
-      {/* ================= MODAL : ENQUIRY FORM ================= */}
-      {open && (
-        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4">
-          <div className="bg-white w-full max-w-2xl rounded-2xl p-8 relative">
-            {/* Close */}
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-2xl font-bold text-gray-500 hover:text-black"
-            >
-              ✕
-            </button>
-
-            {/* Heading */}
-            <h3 className="text-2xl font-semibold mb-2 text-center">
-              Register Your Interest
-            </h3>
-            <p className="text-gray-600 text-sm mb-6 text-center">
-              Fill in your details and our property expert will contact you shortly.
-            </p>
-
-            {/* 🔥 EXISTING FORM (NO NEW FORM CREATED) */}
-            <EnquiryForm />
-          </div>
-        </div>
-      )}
+      {/* ================= REAL MODAL ================= */}
+      <EnquiryModal
+        open={open}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { sanityClient } from "@/lib/sanity.client";
 import { propertiesByDeveloperQuery } from "@/lib/sanity.queries";
-import PropertyCard from "@/components/cards/PropertyCard";
+import DeveloperPropertiesClient from "@/components/DeveloperPropertiesClient";
 
 export default async function DeveloperPage({
   params,
@@ -22,14 +22,7 @@ export default async function DeveloperPage({
         {properties.length === 0 ? (
           <p className="text-gray-500">No properties found.</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 place-items-center">
-            {properties.map((property: any) => (
-              <PropertyCard
-                key={property._id}
-                property={property}
-              />
-            ))}
-          </div>
+          <DeveloperPropertiesClient properties={properties} />
         )}
       </div>
     </main>

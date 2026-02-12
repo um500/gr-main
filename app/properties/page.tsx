@@ -11,10 +11,12 @@ import Footer from "@/components/layout/Footer";
 
 type SearchParams = Promise<{
   community?: string;
+  search?: string;
   type?: string;
   min?: string;
   max?: string;
   purpose?: string;
+  bed?: string;
 }>;
 
 export default async function PropertiesPage({
@@ -22,21 +24,27 @@ export default async function PropertiesPage({
 }: {
   searchParams: SearchParams;
 }) {
-  // ✅ IMPORTANT (Next.js 16 requirement)
+
   const params = await searchParams;
 
+  // Fetch communities for filter dropdown
   const communities = await sanityClient.fetch(communitiesQuery);
 
-  const properties = await sanityClient.fetch(propertiesQuery, {
-    community: params.community ?? null,
-    type: params.type ?? null,
-    min: params.min ? Number(params.min) : null,
-    max: params.max ? Number(params.max) : null,
-    purpose: params.purpose ?? null,
-  });
+  // Fetch filtered properties
+const properties = await sanityClient.fetch(propertiesQuery, {
+  community: params.community ?? null,
+  search: params.search ?? null,
+  purpose: params.purpose ?? null,
+  type: params.type ?? null,
+  bed: params.bed ?? null,
+  min: params.min ? Number(params.min) : null,
+  max: params.max ? Number(params.max) : null,
+});
+
 
   return (
     <main>
+
       {/* HERO */}
       <section className="relative h-[70vh] w-full overflow-hidden">
         <img
@@ -60,15 +68,28 @@ export default async function PropertiesPage({
       {/* FILTER */}
       <PropertyFilter
         communities={communities || []}
-        initialCommunity={params.community ?? ""}
-        initialPurpose={params.purpose ?? "BUY"}  
       />
 
       {/* RESULTS */}
-      <PropertiesClient properties={properties || []} /> 
+      <section className="max-w-7xl mx-auto px-6 py-16">
+        {properties.length === 0 ? (
+          <div className="text-center py-24">
+            <div className="text-6xl mb-4">🔍</div>
+            <h2 className="text-2xl font-semibold">
+              No properties found
+            </h2>
+            <p className="text-gray-500 mt-2">
+              Try adjusting your filters or reset search.
+            </p>
+          </div>
+        ) : (
+          <PropertiesClient properties={properties} />
+        )}
+      </section>
 
       <CTA />
       <Footer />
+
     </main>
   );
 }
