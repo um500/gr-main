@@ -85,7 +85,7 @@ export default async function AnnouncementDetail({
         
 
             <Link
-              href="/announcement"
+              href="/"
               className="border border-[#D4AF37] text-[#D4AF37] px-8 py-3 rounded-full font-semibold hover:bg-[#D4AF37] hover:text-black transition"
             >
               Back to All

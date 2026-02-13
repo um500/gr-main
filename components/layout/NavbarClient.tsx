@@ -62,21 +62,20 @@ export default function NavbarClient({
     <>
       {/* ================= TOP SCROLLING BAR ================= */}
       <div className="marquee-container bg-yellow-500 text-black text-sm py-2 z-[1500]">
-        {announcements?.length > 0 ? (
-          <div className="marquee-content font-medium px-4">
-            {announcements.map((item, index) => (
-              <span key={index} className="mx-6">
-                {item.eventDate && (
-                  <>📅 {new Date(item.eventDate).toLocaleDateString("en-IN")} </>
-                )}
-                {item.city && <>– {item.city} </>}
-                {item.title} |
-              </span>
-            ))}
-          </div>
-        ) : (
-          <span className="px-4">No announcements available</span>
+        {announcements?.length > 0 && (
+  <div className="marquee-content font-medium px-4">
+    {announcements.map((item, index) => (
+      <span key={index} className="mx-6">
+        {item.eventDate && (
+          <>📅 {new Date(item.eventDate).toLocaleDateString("en-IN")} </>
         )}
+        {item.city && <>– {item.city} </>}
+        {item.title} |
+      </span>
+    ))}
+  </div>
+)}
+
       </div>
 
       {/* ================= HEADER ================= */}
