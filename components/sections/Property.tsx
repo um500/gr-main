@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PropertyCard from "../cards/PropertyCard";
 import EnquiryModal from "@/components/ui/EnquiryModal";
+import Link from "next/link";
 
 type PropertyProps = {
   properties: any[];
@@ -53,6 +54,31 @@ export default function Property({ properties }: PropertyProps) {
         onClose={() => setOpenEnquiry(false)}
         propertyName={selectedProperty?.title}
       />
+
+
+      {/* VIEW ALL BUTTON */}
+        <div className="text-center mt-16">
+          <Link
+            href="/properties"
+            className="
+              inline-flex 
+              items-center 
+              gap-2 
+              px-10 
+              py-4 
+              border-2 
+              border-[#C9A227] 
+              text-[#C9A227] 
+              rounded-full 
+              hover:bg-[#C9A227] 
+              hover:text-black 
+              transition-all 
+              duration-300
+            "
+          >
+            View All Properties →
+          </Link>
+        </div>
     </section>
   );
 }

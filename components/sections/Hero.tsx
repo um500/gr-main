@@ -108,10 +108,10 @@ export default function Hero({
 
   const filtered = query.trim()
     ? communities.filter(
-        (c) =>
-          c.name.toLowerCase().includes(query.toLowerCase()) ||
-          c.area.toLowerCase().includes(query.toLowerCase())
-      )
+      (c) =>
+        c.name.toLowerCase().includes(query.toLowerCase()) ||
+        c.area.toLowerCase().includes(query.toLowerCase())
+    )
     : communities.slice(0, 6);
 
   const handleSearch = () => {
@@ -137,13 +137,12 @@ export default function Hero({
           return (
             <div
               key={i}
-              className={`absolute inset-0 transition-transform duration-700 ${
-                i === index
+              className={`absolute inset-0 transition-transform duration-700 ${i === index
                   ? "translate-x-0 z-[1]"
                   : i === prevIndex
-                  ? "-translate-x-full"
-                  : "translate-x-full"
-              }`}
+                    ? "-translate-x-full"
+                    : "translate-x-full"
+                }`}
             >
               <img
                 src={imageUrl}
@@ -159,7 +158,7 @@ export default function Hero({
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="relative z-10 h-full flex items-center">
+      <div className="relative z-30 h-full flex items-center">
         <div className="max-w-5xl px-6 md:ml-36 w-full">
           <h1 className="text-4xl md:text-6xl font-serif font-bold">
             {slidesToUse[index].title}
@@ -208,10 +207,18 @@ export default function Hero({
 
             {/* ================= SUGGESTIONS ================= */}
             {showSuggestions && filtered.length > 0 && (
-              <div className="absolute left-0 top-full w-full 
-                              bg-white dark:bg-[#1E293B] 
-                              shadow-2xl rounded-xl mt-2 
-                              z-[9999] overflow-hidden transition-colors duration-300">
+              <div
+                className="absolute left-0 top-full w-full 
+             bg-white dark:bg-[#1E293B] 
+             shadow-xl rounded-lg mt-2 
+             z-50 
+             max-h-[160px] 
+             overflow-y-auto
+             text-sm
+             transition-colors duration-300"
+              >
+
+
 
                 {filtered.map((c) => (
                   <div
