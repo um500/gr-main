@@ -38,6 +38,14 @@ export default defineType({
               type: "boolean",
               initialValue: true,
             },
+
+            // ✅ NEW FIELD ADDED (Property Link)
+            {
+              name: "linkedProperty",
+              title: "Linked Property",
+              type: "reference",
+              to: [{ type: "property" }],
+            },
           ],
         },
       ],

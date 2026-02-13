@@ -15,7 +15,20 @@ interface HeroSlide {
     };
   };
   active?: boolean;
+
+  // ✅ ADD THIS
+  linkedProperty?: {
+  _id: string;
+  title: string;
+  slug: string;
+  developer?: {
+    name: string;
+    slug: string;
+  };
+};
+
 }
+
 
 interface Community {
   _id: string;
@@ -138,10 +151,10 @@ export default function Hero({
             <div
               key={i}
               className={`absolute inset-0 transition-transform duration-700 ${i === index
-                  ? "translate-x-0 z-[1]"
-                  : i === prevIndex
-                    ? "-translate-x-full"
-                    : "translate-x-full"
+                ? "translate-x-0 z-[1]"
+                : i === prevIndex
+                  ? "-translate-x-full"
+                  : "translate-x-full"
                 }`}
             >
               <img
@@ -171,10 +184,20 @@ export default function Hero({
           )}
 
           <button
-            className="mt-8 px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition"
-          >
-            {ctaText}
-          </button>
+  onClick={() => {
+    const developerSlug =
+      slidesToUse[index]?.linkedProperty?.developer?.slug;
+
+    if (developerSlug) {
+      router.push(`/developers/${developerSlug}`);
+    }
+  }}
+  className="mt-8 px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition"
+>
+  {ctaText}
+</button>
+
+
 
           {/* ================= SEARCH ================= */}
           <div

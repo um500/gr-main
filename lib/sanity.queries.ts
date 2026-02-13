@@ -13,10 +13,23 @@ export const homepageHeroQuery = groq`
     active,
     image{
       asset->{ url }
+    },
+
+    linkedProperty->{
+      _id,
+      title,
+      "slug": slug.current,
+
+      developer->{
+        name,
+        "slug": slug.current
+      }
     }
   }
 }
 `;
+
+
 
 /* ======================================================
    FEATURED PROPERTIES (HOME – TOP 4)
