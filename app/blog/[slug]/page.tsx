@@ -7,15 +7,15 @@ import Footer from "@/components/layout/Footer";
 import { notFound } from "next/navigation";
 
 type PageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export default async function Page({ params }: PageProps) {
-  const slug = params.slug;
 
-  // ✅ Correct Sanity fetch with parameter
+  const { slug } = await params;   // ✅ IMPORTANT FIX
+
   const blog = await sanityClient.fetch(
     getSingleBlogQuery,
     { slug }
@@ -30,7 +30,7 @@ export default async function Page({ params }: PageProps) {
 
       {/* ================= HERO SECTION ================= */}
       <section className="relative h-[420px] md:h-[520px] flex items-center justify-center text-white text-center overflow-hidden">
-        
+
         {blog.mainImage?.asset?.url && (
           <img
             src={blog.mainImage.asset.url}
@@ -68,6 +68,45 @@ export default async function Page({ params }: PageProps) {
           <PortableText
             value={blog.content}
             components={{
+              block: {
+                h1: ({ children }) => (
+                  <h1 className="text-4xl font-bold mt-10 mb-4">
+                    {children}
+                  </h1>
+                ),
+                h2: ({ children }) => (
+                  <h2 className="text-3xl font-semibold mt-8 mb-3">
+                    {children}
+                  </h2>
+                ),
+                h3: ({ children }) => (
+                  <h3 className="text-2xl font-semibold mt-6 mb-2">
+                    {children}
+                  </h3>
+                ),
+                h4: ({ children }) => (
+                  <h4 className="text-xl font-semibold mt-4 mb-2 text-gray-900 dark:text-white">
+                    {children}
+                  </h4>
+                ),
+                normal: ({ children }) => (
+                  <p className="mb-4 leading-relaxed">
+                    {children}
+                  </p>
+                ),
+              },
+              list: {
+                bullet: ({ children }) => (
+                  <ul className="list-disc pl-6 space-y-2 mb-6">
+                    {children}
+                  </ul>
+                ),
+                number: ({ children }) => (
+                  <ol className="list-decimal pl-6 space-y-2 mb-6">
+                    {children}
+                  </ol>
+                ),
+              },
               types: {
                 image: ({ value }) => (
                   <img
@@ -79,6 +118,7 @@ export default async function Page({ params }: PageProps) {
               },
             }}
           />
+
         </div>
       </section>
 
