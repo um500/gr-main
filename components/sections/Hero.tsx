@@ -18,14 +18,14 @@ interface HeroSlide {
 
   // ✅ ADD THIS
   linkedProperty?: {
-  _id: string;
-  title: string;
-  slug: string;
-  developer?: {
-    name: string;
+    _id: string;
+    title: string;
     slug: string;
+    developer?: {
+      name: string;
+      slug: string;
+    };
   };
-};
 
 }
 
@@ -82,28 +82,35 @@ export default function Hero({
   const [buyType, setBuyType] = useState<"buy" | "rent">("buy");
   const [query, setQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [direction, setDirection] = useState<"left" | "right">("right");
+
 
   /* ================= SLIDER ================= */
 
   const changeSlide = (newIndex: number) => {
-    if (isAnimating || slidesToUse.length < 2) return;
+    if (slidesToUse.length < 2) return;
 
     setPrevIndex(index);
-    setIsAnimating(true);
     setIndex(newIndex);
-
-    setTimeout(() => setIsAnimating(false), 700);
   };
+
+
+
+
 
   useEffect(() => {
     if (slidesToUse.length < 2) return;
 
     const timer = setInterval(() => {
-      changeSlide((index + 1) % slidesToUse.length);
-    }, 5000);
+      setPrevIndex((prev) => prev);
+      setIndex((prev) => (prev + 1) % slidesToUse.length);
+    }, 4000);
 
     return () => clearInterval(timer);
-  }, [index, slidesToUse.length]);
+  }, [slidesToUse]);
+
+
+
 
   /* ================= OUTSIDE CLICK ================= */
 
@@ -150,12 +157,15 @@ export default function Hero({
           return (
             <div
               key={i}
-              className={`absolute inset-0 transition-transform duration-700 ${i === index
-                ? "translate-x-0 z-[1]"
-                : i === prevIndex
-                  ? "-translate-x-full"
-                  : "translate-x-full"
+              className={`absolute inset-0 transition-transform duration-500 ease-in-out ${i === index
+                  ? "translate-x-0 z-[2]"
+                  : i === prevIndex
+                    ? "-translate-x-full z-[1]"
+                    : "translate-x-full"
                 }`}
+
+
+
             >
               <img
                 src={imageUrl}
@@ -167,7 +177,7 @@ export default function Hero({
         })}
 
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/50 z-[2]" />
+        <div className="absolute inset-0 bg-black/50 z-[2] pointer-events-none" />
       </div>
 
       {/* ================= CONTENT ================= */}
@@ -184,18 +194,18 @@ export default function Hero({
           )}
 
           <button
-  onClick={() => {
-    const developerSlug =
-      slidesToUse[index]?.linkedProperty?.developer?.slug;
+            onClick={() => {
+              const developerSlug =
+                slidesToUse[index]?.linkedProperty?.developer?.slug;
 
-    if (developerSlug) {
-      router.push(`/developers/${developerSlug}`);
-    }
-  }}
-  className="mt-8 px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition"
->
-  {ctaText}
-</button>
+              if (developerSlug) {
+                router.push(`/developers/${developerSlug}`);
+              }
+            }}
+            className="mt-8 px-8 py-3 border border-white text-white hover:bg-white hover:text-black transition"
+          >
+            {ctaText}
+          </button>
 
 
 
@@ -279,9 +289,10 @@ export default function Hero({
             (index - 1 + slidesToUse.length) % slidesToUse.length
           )
         }
-        className="absolute left-6 top-1/2 z-20 
-                   bg-black/40 p-3 rounded-full 
-                   text-white hover:bg-black/60 transition"
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-30
+             bg-black/40 p-3 rounded-full
+             text-white hover:bg-black/60
+             transition cursor-pointer"
       >
         <ChevronLeft />
       </button>
@@ -290,12 +301,14 @@ export default function Hero({
         onClick={() =>
           changeSlide((index + 1) % slidesToUse.length)
         }
-        className="absolute right-6 top-1/2 z-20 
-                   bg-black/40 p-3 rounded-full 
-                   text-white hover:bg-black/60 transition"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-30
+             bg-black/40 p-3 rounded-full
+             text-white hover:bg-black/60
+             transition cursor-pointer"
       >
         <ChevronRight />
       </button>
+
     </section>
   );
 }
