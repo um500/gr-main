@@ -20,7 +20,7 @@ export default function PropertyCard({
     property?.images?.map((img: any) => img?.asset?.url).filter(Boolean) || [];
 
   const brochureUrl = property?.brochure?.asset?.url;
-console.log("Brochure URL:", brochureUrl);
+
 
   const [index, setIndex] = useState(0);
   const [openBrochure, setOpenBrochure] = useState(false);

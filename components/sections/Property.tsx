@@ -1,17 +1,22 @@
 "use client";
 
-import { motion } from "framer-motion";
-import HomePropertyCard from "../cards/HomePropertyCard";
+import { useState } from "react";
+import PropertyCard from "../cards/PropertyCard";
+import EnquiryModal from "@/components/ui/EnquiryModal";
 
 type PropertyProps = {
   properties: any[];
 };
 
 export default function Property({ properties }: PropertyProps) {
+  const [openEnquiry, setOpenEnquiry] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<any>(null);
+
   return (
     <section className="py-24 px-6 bg-[#E5E7EB] dark:bg-[#0F172A] transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
 
+        {/* Heading */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <p className="text-sm tracking-[0.2em] font-semibold uppercase mb-4 text-[#C9A227]">
             Projects
@@ -26,16 +31,28 @@ export default function Property({ properties }: PropertyProps) {
           </p>
         </div>
 
+        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          {properties?.map((p: any) => (
-            <HomePropertyCard
-              key={p._id}
-              property={p}
+          {properties?.map((property: any) => (
+            <PropertyCard
+              key={property._id}
+              property={property}
+              onEnquire={(p) => {
+                setSelectedProperty(p);
+                setOpenEnquiry(true);
+              }}
             />
           ))}
         </div>
 
       </div>
+
+      {/* Modal */}
+      <EnquiryModal
+        open={openEnquiry}
+        onClose={() => setOpenEnquiry(false)}
+        propertyName={selectedProperty?.title}
+      />
     </section>
   );
 }
