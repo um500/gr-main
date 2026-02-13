@@ -68,11 +68,10 @@ export default function ContactPage() {
 
           <div className="space-y-6">
             <Info icon={<MapPin />} title="Office Address"
-              text={`Business Bay, Churchill Towers\nDubai, United Arab Emirates`} />
-            <Info icon={<Phone />} title="Phone" text="+971 50 123 4567" />
-            <Info icon={<Mail />} title="Email" text="info@grpremium.com" />
-            <Info icon={<Clock />} title="Working Hours"
-              text={`Mon – Sat: 9:00 AM – 6:00 PM\nSunday: By Appointment`} />
+              text={`401C, Aspin Commercial Tower, Sheikh Zayed Road, Dubai`} />
+            <Info icon={<Phone />} title="Phone" text="+971 54 308 7712" />
+            <Info icon={<Mail />} title="Email" text="sales@grpremium.com" />
+
           </div>
 
           <div className="mt-10 rounded-xl overflow-hidden border-2 border-[#C9A227] h-[300px] sm:h-[360px] w-full">
@@ -81,7 +80,7 @@ export default function ContactPage() {
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps?q=Churchill+Towers+Business+Bay+Dubai&output=embed"
+              src="https://www.google.com/maps?q=G+R+Premium+Properties+LLC+Aspin+Commercial+Tower+401C+Sheikh+Zayed+Road+Dubai&output=embed"
             />
           </div>
         </div>

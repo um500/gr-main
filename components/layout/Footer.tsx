@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
-import { SiFacebook, SiInstagram, SiX, SiLinkedin } from "react-icons/si";
+import { SiFacebook, SiInstagram, SiGoogle, SiLinkedin } from "react-icons/si";
 import Image from "next/image";
 import Link from "next/link";
 import EnquiryModal from "@/components/ui/EnquiryModal";
@@ -24,6 +24,26 @@ export default function Footer() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  /* ===== SOCIAL LINKS ===== */
+  const socialLinks = [
+    {
+      icon: SiFacebook,
+      url: "https://www.facebook.com/GRpremiumPropertiesLLC",
+    },
+    {
+      icon: SiInstagram,
+      url: "https://www.instagram.com/grpp_dxb/",
+    },
+    {
+      icon: SiGoogle,
+      url: "https://share.google/jKl5OQ4QrEoc6et9V",
+    },
+    {
+      icon: SiLinkedin,
+      url: "https://www.linkedin.com/company/grpremiumproperties/",
+    },
+  ];
 
   return (
     <>
@@ -57,19 +77,24 @@ export default function Footer() {
 
               {/* Social Icons */}
               <div className="flex items-center gap-3">
-                {[SiFacebook, SiInstagram, SiX, SiLinkedin].map((Icon, i) => (
-                  <a
-                    key={i}
-                    href="#"
-                    className="w-9 h-9 rounded-full flex items-center justify-center
-                               border border-gray-600
-                               hover:border-[#D4A843]
-                               hover:text-white
-                               transition-all duration-300"
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                ))}
+                {socialLinks.map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <a
+                      key={i}
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-9 h-9 rounded-full flex items-center justify-center
+                                 border border-gray-600
+                                 hover:border-[#D4A843]
+                                 hover:text-white
+                                 transition-all duration-300"
+                    >
+                      <Icon className="w-4 h-4" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
 
@@ -133,12 +158,12 @@ export default function Footer() {
 
                 <li className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-[#D4A843]" />
-                  +971 50 123 4567
+                  +91 - 9330230426
                 </li>
 
                 <li className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#D4A843]" />
-                  info@grpremium.com
+                  sales@grpremium.com
                 </li>
               </ul>
 
@@ -157,11 +182,34 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[#2a3a4a] py-6 text-center">
-          <p className="text-xs text-gray-500">
-            © 2026 GR Premium Properties. All rights reserved.
-          </p>
-        </div>
+        <div className="border-t border-[#2a3a4a] py-6">
+  <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+    
+    <p>
+      © Copyright {new Date().getFullYear()} G R Premium Properties LLC.
+      Designed By Asiatech Inc. All Rights Reserved.
+    </p>
+
+    <div className="flex items-center gap-6">
+      <Link
+        href="/privacy-policy"
+        className="hover:text-white transition-colors duration-300"
+      >
+        Privacy Policy
+      </Link>
+
+      <Link
+        href="/terms-conditions"
+        className="hover:text-white transition-colors duration-300"
+      >
+        Terms & Conditions
+      </Link>
+    </div>
+
+  </div>
+</div>
+
+
       </footer>
 
       {/* GLOBAL ENQUIRY MODAL */}

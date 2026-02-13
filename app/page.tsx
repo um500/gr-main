@@ -6,13 +6,14 @@ import Blog from "@/components/sections/FeaturedBlogs";
 import Terminology from "@/components/sections/Terminology";
 import CTA from "@/components/sections/CTA";
 import Footer from "@/components/layout/Footer";
+import AutoPopupWrapper from "@/components/AutoPopupWrapper"; // ✅ ADD THIS
 
 import { sanityClient } from "@/lib/sanity.client";
 import {
   homepageHeroQuery,
   communitiesQuery,
   featuredDevelopersQuery,
-  featuredPropertiesQuery,   // ✅ ADD THIS
+  featuredPropertiesQuery,
 } from "@/lib/sanity.queries";
 
 import { HomepageData } from "@/types/homepage";
@@ -21,8 +22,6 @@ export default async function Home() {
   const homepage: HomepageData = await sanityClient.fetch(homepageHeroQuery);
   const developers = await sanityClient.fetch(featuredDevelopersQuery);
   const communities = await sanityClient.fetch(communitiesQuery);
-
-  // ✅ FETCH FEATURED PROPERTIES
   const featuredProperties = await sanityClient.fetch(featuredPropertiesQuery);
 
   const heroSlides =
@@ -30,6 +29,9 @@ export default async function Home() {
 
   return (
     <>
+      {/* ✅ AUTO POPUP (Client Component) */}
+      <AutoPopupWrapper />
+
       <Hero
         slides={heroSlides}
         ctaText={homepage?.heroCTA || "Explore Properties"}
@@ -38,10 +40,10 @@ export default async function Home() {
 
       <About />
 
-      {/* ✅ PASS PROPERTIES */}
       <Property properties={featuredProperties || []} />
 
       <Developer developers={developers || []} />
+
       <Blog />
       <Terminology />
       <CTA />
